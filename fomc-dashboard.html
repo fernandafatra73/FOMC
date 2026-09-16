@@ -1,0 +1,1080 @@
+<!doctype html>
+<title>Bulletin FOMC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --paper:      #f7f3ea;
+    --surface:    #ffffff;
+    --surface-2:  #f1ecdd;
+    --ink:        #201b10;
+    --ink-2:      #5c5540;
+    --ink-mute:   #8d846c;
+    --hair:       #e3dac2;
+    --hair-strong:#cdc0a0;
+    --accent:     #93690f;
+    --accent-ink: #6e4e0a;
+    --accent-soft:#f0e0b4;
+    --up:         #0b7d2e;
+    --up-soft:    #dcefdf;
+    --down:       #b0392c;
+    --down-soft:  #f5e0dc;
+    --focus:      #1c5cab;
+    --shadow: 0 1px 2px rgba(32,27,16,0.06), 0 6px 20px -8px rgba(32,27,16,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --paper:      #14120c;
+      --surface:    #1c1911;
+      --surface-2:  #242015;
+      --ink:        #f3ecd9;
+      --ink-2:      #c8bea1;
+      --ink-mute:   #948a6f;
+      --hair:       #372f1e;
+      --hair-strong:#4a4026;
+      --accent:     #dcaa3f;
+      --accent-ink: #eec872;
+      --accent-soft:#3a2f14;
+      --up:         #43b26a;
+      --up-soft:    #163524;
+      --down:       #e0685a;
+      --down-soft:  #3a201c;
+      --focus:      #6ea8ea;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -8px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --paper:      #14120c;
+    --surface:    #1c1911;
+    --surface-2:  #242015;
+    --ink:        #f3ecd9;
+    --ink-2:      #c8bea1;
+    --ink-mute:   #948a6f;
+    --hair:       #372f1e;
+    --hair-strong:#4a4026;
+    --accent:     #dcaa3f;
+    --accent-ink: #eec872;
+    --accent-soft:#3a2f14;
+    --up:         #43b26a;
+    --up-soft:    #163524;
+    --down:       #e0685a;
+    --down-soft:  #3a201c;
+    --focus:      #6ea8ea;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -8px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Public Sans", system-ui, sans-serif;
+    padding-inline: max(16px, calc((100% - 1180px)/2));
+    padding-block: 28px 60px;
+  }
+  h1,h2,h3{font-family:"Source Serif 4", Georgia, serif; text-wrap:balance; margin:0; font-weight:600;}
+  .num{font-family:"IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums;}
+  a{color:var(--focus);}
+  ::selection{background:var(--accent-soft);}
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+    flex-wrap:wrap;
+    border-bottom: 3px double var(--hair-strong);
+    padding-bottom:14px; margin-bottom:20px;
+  }
+  .masthead .kicker{
+    font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent-ink);
+    font-weight:600; margin:0 0 6px;
+  }
+  .masthead h1{font-size:clamp(24px,3.4vw,34px); line-height:1.15;}
+  .masthead .sub{color:var(--ink-2); font-size:14px; margin-top:6px; max-width:60ch;}
+  .masthead .meta{font-size:12px; color:var(--ink-mute); text-align:right;}
+
+  /* ---------- filter bar ---------- */
+  .filterbar{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    background:var(--surface); border:1px solid var(--hair); border-radius:10px;
+    padding:10px 14px; margin-bottom:18px; box-shadow:var(--shadow);
+  }
+  .filterbar label{font-size:12px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:.06em; margin-right:6px;}
+  select, input[type=number], input[type=text]{
+    font: inherit; font-size:13.5px; color:var(--ink); background:var(--surface);
+    border:1px solid var(--hair-strong); border-radius:7px; padding:6px 9px;
+  }
+  select:focus, input:focus{outline:2px solid var(--focus); outline-offset:1px;}
+  .chip-row{display:flex; gap:6px; flex-wrap:wrap;}
+  .chip{
+    font-size:12px; border:1px solid var(--hair-strong); background:var(--surface);
+    color:var(--ink-2); padding:4px 10px; border-radius:99px; cursor:pointer;
+  }
+  .chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff;}
+  :root[data-theme="dark"] .chip[aria-pressed="true"], @media (prefers-color-scheme:dark){.chip[aria-pressed="true"]{color:#1a1408;}}
+  .spacer{flex:1;}
+  .reset-btn{
+    font-size:12.5px; color:var(--accent-ink); background:none; border:none; cursor:pointer; text-decoration:underline;
+  }
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex; gap:4px; margin-bottom:18px; border-bottom:1px solid var(--hair); flex-wrap:wrap;}
+  .tab{
+    font:inherit; font-size:14px; font-weight:600; color:var(--ink-mute); background:none; border:none;
+    padding:10px 14px; cursor:pointer; border-bottom:2.5px solid transparent; margin-bottom:-1px;
+  }
+  .tab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--accent);}
+  .tab:hover{color:var(--ink);}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* ---------- stat tiles ---------- */
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:18px;}
+  .tile{
+    background:var(--surface); border:1px solid var(--hair); border-radius:10px; padding:13px 14px;
+    box-shadow:var(--shadow);
+  }
+  .tile .label{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-mute);}
+  .tile .value{font-size:22px; margin-top:4px; font-weight:600;}
+  .tile .sub{font-size:12px; color:var(--ink-2); margin-top:2px;}
+  .tile.up .value{color:var(--up);} .tile.down .value{color:var(--down);}
+
+  /* ---------- cards / sections ---------- */
+  .card{
+    background:var(--surface); border:1px solid var(--hair); border-radius:12px;
+    padding:18px 20px; margin-bottom:18px; box-shadow:var(--shadow);
+  }
+  .card h2{font-size:18px; margin-bottom:4px;}
+  .card .desc{font-size:13px; color:var(--ink-2); margin-bottom:14px; max-width:72ch;}
+  .grid2{display:grid; grid-template-columns:1.1fr .9fr; gap:20px;}
+  @media (max-width:820px){.grid2{grid-template-columns:1fr;}}
+  .fieldset{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px 14px;}
+  .field{display:flex; flex-direction:column; gap:4px;}
+  .field label{font-size:12px; color:var(--ink-2);}
+  .field .hint{font-size:11px; color:var(--ink-mute);}
+  .field input, .field select{width:100%;}
+  .preset-row{display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;}
+
+  /* ---------- table ---------- */
+  .tablewrap{overflow-x:auto; border:1px solid var(--hair); border-radius:10px;}
+  table{width:100%; border-collapse:collapse; font-size:13px; min-width:920px;}
+  thead th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-mute);
+    background:var(--surface-2); padding:9px 10px; border-bottom:1px solid var(--hair); white-space:nowrap; position:sticky; top:0;
+  }
+  tbody td{padding:8px 10px; border-bottom:1px solid var(--hair); white-space:nowrap;}
+  tbody tr:hover{background:var(--surface-2);}
+  .badge{font-size:10.5px; padding:2px 7px; border-radius:99px; font-weight:600;}
+  .badge.sched{background:var(--surface-2); color:var(--ink-2); border:1px solid var(--hair-strong);}
+  .badge.emer{background:var(--down-soft); color:var(--down);}
+  .badge.future{background:var(--accent-soft); color:var(--accent-ink);}
+  .dir-up{color:var(--up); font-weight:600;}
+  .dir-down{color:var(--down); font-weight:600;}
+  .dir-flat{color:var(--ink-mute);}
+  .note-cell{color:var(--ink-2); white-space:normal; min-width:200px;}
+
+  /* ---------- chart ---------- */
+  .chart-wrap{position:relative;}
+  svg text{font-family:"IBM Plex Mono", monospace; fill:var(--ink-mute);}
+  .bar-tip{
+    position:absolute; pointer-events:none; background:var(--ink); color:var(--paper);
+    font-size:12px; padding:6px 9px; border-radius:6px; transform:translate(-50%,-110%);
+    white-space:nowrap; opacity:0; transition:opacity .1s; z-index:5; font-family:"IBM Plex Mono",monospace;
+  }
+  .legend{display:flex; gap:16px; font-size:12px; color:var(--ink-2); margin-top:8px;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .swatch{width:10px; height:10px; border-radius:2px; display:inline-block;}
+
+  /* ---------- calculator output ---------- */
+  .result-box{
+    background:var(--surface-2); border:1px solid var(--hair); border-radius:10px; padding:14px 16px;
+  }
+  .result-row{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--hair);}
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{color:var(--ink-2); font-size:13px;}
+  .result-row .v{font-weight:600;}
+  .warn-box{
+    background:var(--down-soft); color:var(--down); border-radius:8px; padding:10px 12px; font-size:12.5px; margin-top:10px;
+  }
+  .ok-box{
+    background:var(--up-soft); color:var(--up); border-radius:8px; padding:10px 12px; font-size:12.5px; margin-top:10px;
+  }
+  .info-box{
+    background:var(--accent-soft); color:var(--accent-ink); border-radius:8px; padding:10px 12px; font-size:12.5px; margin-top:10px;
+  }
+
+  .disclaimer{
+    font-size:12px; color:var(--ink-mute); border-top:1px solid var(--hair); padding-top:14px; margin-top:8px; line-height:1.6;
+  }
+  .theme-toggle{
+    font-size:12px; border:1px solid var(--hair-strong); background:var(--surface); color:var(--ink-2);
+    border-radius:7px; padding:5px 10px; cursor:pointer;
+  }
+
+  @media (max-width:480px){
+    .grid2{gap:14px;}
+    .tiles{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+
+<div class="masthead">
+  <div>
+    <p class="kicker">Analisa Pergerakan Harga &middot; Gold XAU/USD</p>
+    <h1>Bulletin FOMC 2020&ndash;2026</h1>
+    <p class="sub">Kalender rapat The Fed, reaksi harga emas sebelum/sesudah pengumuman, dan kalkulator risiko untuk simulasi modal lot 0.01 &mdash; berbasis level harga, bukan tebakan arah.</p>
+  </div>
+  <div class="meta">
+    <div id="dataRange">memuat data&hellip;</div>
+    <button class="theme-toggle" id="themeToggle" type="button" style="margin-top:6px;">Mode gelap/terang</button>
+  </div>
+</div>
+
+<div class="filterbar">
+  <div>
+    <label for="yearSel">Tahun</label>
+    <select id="yearSel"><option value="all">Semua (2020&ndash;2026)</option></select>
+  </div>
+  <div>
+    <label for="monthSel">Bulan</label>
+    <select id="monthSel"><option value="all">Semua bulan</option></select>
+  </div>
+  <button class="chip" id="grafikBtn" type="button" aria-pressed="false">Grafik &#128202;</button>
+  <div class="spacer"></div>
+  <button class="reset-btn" id="resetFilter" type="button">Reset filter</button>
+</div>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" data-panel="overview">Ringkasan</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="calendar">Kalender &amp; Data Harga</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="calc">Kalkulator Modal (Lot 0.01)</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="sim">Simulasi Buy/Sell Stop</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="monthly">Grafik Bulanan</button>
+</div>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section class="panel active" id="panel-overview">
+  <div class="tiles" id="statTiles"></div>
+
+  <div class="card">
+    <h2>Perubahan harga per FOMC (sebelum &rarr; keesokan hari)</h2>
+    <p class="desc">Setiap batang = satu rapat FOMC dalam rentang filter aktif. Hijau berarti emas naik dari harga penutupan sebelum rapat ke penutupan hari berikutnya; merah berarti turun. Arahkan kursor ke batang untuk detail.</p>
+    <div class="chart-wrap"><svg id="barChart" viewBox="0 0 1000 340" style="width:100%; height:auto; display:block;"></svg><div class="bar-tip" id="barTip"></div></div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--up)"></i>Naik</span>
+      <span><i class="swatch" style="background:var(--down)"></i>Turun</span>
+      <span><i class="swatch" style="background:var(--ink-mute)"></i>Belum ada data (rapat mendatang)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Catatan metodologi</h2>
+    <p class="desc" style="margin-bottom:0;">
+      Harga bersumber dari data harian XAU/USD (Twelve Data). <b>"Sebelum"</b> = harga penutupan hari bursa terakhir sebelum tanggal keputusan FOMC. <b>"Hari keputusan"</b> = open/high/low/close pada hari pengumuman (data harian, sehingga mencakup pergerakan sepanjang hari, bukan hanya beberapa menit setelah rilis pukul 14:00 ET). <b>"Keesokan hari"</b> = penutupan satu hari bursa setelahnya, dipakai sebagai ukuran reaksi penuh. Definisi 1 poin dapat diubah di tab Kalkulator &amp; Simulasi agar sesuai konvensi broker Anda.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== CALENDAR / DATA ===================== -->
+<section class="panel" id="panel-calendar">
+  <div class="card">
+    <h2>Kalender FOMC &amp; reaksi harga emas</h2>
+    <p class="desc">Klik header kolom tidak diperlukan &mdash; gunakan filter tahun/bulan di atas untuk membandingkan, misalnya Januari 2020 vs Januari 2021&ndash;2026.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th><th>Tipe</th>
+            <th>Sebelum</th><th>Open</th><th>High</th><th>Low</th><th>Close (hari-H)</th>
+            <th>Keesokan</th><th>Range hari-H</th><th>Perubahan</th><th>Arah</th><th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody id="calTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CALCULATOR ===================== -->
+<section class="panel" id="panel-calc">
+  <div class="card">
+    <h2>Pengaturan instrumen &amp; nilai poin</h2>
+    <p class="desc">Sesuaikan dengan spesifikasi broker Anda &mdash; ini menentukan seluruh perhitungan profit/loss di bawah.</p>
+    <div class="preset-row" id="instrumentPresets"></div>
+    <div class="fieldset">
+      <div class="field"><label>Ukuran kontrak per 1.00 lot</label><input type="number" id="contractSize" value="100" step="1"><span class="hint">contoh: emas 100 oz, forex 100.000 unit</span></div>
+      <div class="field"><label>Nilai 1 poin (pergerakan harga, USD)</label><input type="number" id="pointSize" value="0.01" step="0.0001"><span class="hint">mis. 0.01 utk emas, 0.0001 utk EURUSD</span></div>
+      <div class="field"><label>Ukuran lot</label><input type="number" id="lotSize" value="0.01" step="0.01" min="0.01"></div>
+      <div class="field"><label>Leverage (untuk estimasi margin)</label><input type="number" id="leverage" value="500" step="1"></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Kalkulator profit / loss</h2>
+      <p class="desc">Masukkan level entry, Stop Loss, dan Take Profit &mdash; jarak antar level menentukan besar risiko dan potensi profit, bukan tebakan arah pasar.</p>
+      <div class="fieldset">
+        <div class="field"><label>Arah posisi</label>
+          <select id="calcDir"><option value="buy">BUY</option><option value="sell">SELL</option></select>
+        </div>
+        <div class="field"><label>Harga entry</label><input type="number" id="calcEntry" value="2650.00" step="0.01"></div>
+        <div class="field"><label>Stop Loss</label><input type="number" id="calcSL" value="2645.00" step="0.01"></div>
+        <div class="field"><label>Take Profit</label><input type="number" id="calcTP" value="2660.00" step="0.01"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Hasil simulasi</h2>
+      <div class="result-box" id="calcResult"></div>
+      <div id="calcWarn"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Berapa modal yang dibutuhkan?</h2>
+    <p class="desc">Estimasi berdasarkan berapa persen dari modal yang bersedia Anda risikokan pada satu posisi (bukan saran finansial).</p>
+    <div class="fieldset">
+      <div class="field"><label>Risiko per posisi (% dari modal)</label><input type="number" id="riskPct" value="2" step="0.1"></div>
+    </div>
+    <div class="result-box" style="margin-top:12px;" id="capitalResult"></div>
+  </div>
+</section>
+
+<!-- ===================== SIMULATOR ===================== -->
+<section class="panel" id="panel-sim">
+  <div class="card">
+    <h2>Simulasi &ldquo;menunggu Buy Stop / Sell Stop&rdquo;</h2>
+    <p class="desc">
+      Logika: tentukan range sebelum FOMC &rarr; pasang BUY STOP di atas range, SELL STOP di bawah range &rarr; sisi yang tersentuh lebih dulu aktif, sisi lain otomatis batal (OCO) &rarr; SL &amp; TP dihitung dari jarak/rasio risiko. Hasil disimulasikan memakai data High/Low/Close riil hari FOMC yang dipilih, sehingga ini adalah <b>backtest mekanis</b>, bukan prediksi.
+    </p>
+    <div class="fieldset">
+      <div class="field" style="grid-column:1/-1; max-width:340px;">
+        <label>Pilih tanggal FOMC</label>
+        <select id="simEvent"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Level order</h2>
+      <div class="fieldset">
+        <div class="field"><label>Range tinggi (sebelum rilis)</label><input type="number" id="simRangeHigh" step="0.01"><span class="hint">default = harga sebelum + separuh range historis</span></div>
+        <div class="field"><label>Range rendah (sebelum rilis)</label><input type="number" id="simRangeLow" step="0.01"></div>
+        <div class="field"><label>Buffer stop order (poin)</label><input type="number" id="simBuffer" value="50" step="1"></div>
+        <div class="field"><label>Jarak SL (poin)</label><input type="number" id="simSL" value="150" step="1"></div>
+        <div class="field"><label>Rasio Risk:Reward</label>
+          <select id="simRR"><option value="1">1 : 1</option><option value="1.5" selected>1 : 1.5</option><option value="2">1 : 2</option><option value="3">1 : 3</option></select>
+        </div>
+        <div class="field"><label>Lot</label><input type="number" id="simLot" value="0.01" step="0.01"></div>
+      </div>
+      <div class="info-box" id="simLevels" style="margin-top:14px;"></div>
+    </div>
+    <div class="card">
+      <h2>Hasil backtest hari itu</h2>
+      <div class="result-box" id="simResult"></div>
+      <div id="simFlag"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Statistik seberapa sering breakout ke satu arah</h2>
+    <p class="desc">Dihitung dari seluruh rapat pada rentang filter tahun/bulan aktif, memakai buffer &amp; jarak SL saat ini serta range historis otomatis per rapat (bukan level manual di atas).</p>
+    <div class="tiles" id="simStatsTiles"></div>
+  </div>
+
+  <div class="disclaimer">
+    <b>Peringatan risiko:</b> Rilis FOMC sering memicu lonjakan spread dan volatilitas ekstrem (slippage saat stop order tereksekusi, spread melebar beberapa detik di sekitar pukul 14:00&ndash;14:30 ET). Simulasi ini memakai data candle harian (bukan tick), sehingga tidak menjamin harga eksekusi riil. Alat ini murni untuk perencanaan risiko dan edukasi &mdash; tidak ada sisi (BUY atau SELL) yang dianggap pasti profit.
+  </div>
+</section>
+
+<!-- ===================== MONTHLY CHART (2020-2026) ===================== -->
+<section class="panel" id="panel-monthly">
+  <div class="card">
+    <h2>Grafik bulanan &mdash; seluruh tahun 2020&ndash;2026</h2>
+    <p class="desc">Setiap rapat FOMC dikelompokkan menurut bulan kalendernya (Januari&ndash;Desember) supaya tahun-tahun bisa dibandingkan berdampingan, misalnya semua rapat bulan Maret dari 2020 sampai 2026. Tampilan ini selalu menampilkan seluruh 2020&ndash;2026, terlepas dari filter tahun/bulan di atas.</p>
+    <div class="chart-wrap"><svg id="monthlyChart" viewBox="0 0 1000 380" style="width:100%; height:auto; display:block;"></svg><div class="bar-tip" id="monthlyTip"></div></div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--up)"></i>Naik</span>
+      <span><i class="swatch" style="background:var(--down)"></i>Turun</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Tanggal FOMC &amp; besar penurunan/kenaikan per bulan</h2>
+    <p class="desc" id="monthlyTableDesc">Diurutkan per bulan kalender, lalu per tahun &mdash; memakai definisi 1 poin/pip dari tab Kalkulator.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Bulan</th><th>Tahun</th><th>Tanggal FOMC</th><th>Tipe</th><th>Perubahan</th><th>Arah</th><th>Visual</th></tr></thead>
+        <tbody id="monthlyTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Analisa pola bulanan (AI)</h2>
+    <p class="desc">Meminta Claude membaca ringkasan statistik per bulan di atas dan menuliskan pola yang terlihat &mdash; bukan prediksi harga, karena jumlah sampel per bulan sangat kecil (maksimum 7 kejadian).</p>
+    <button class="chip" id="aiAnalyzeBtn" type="button" style="padding:7px 14px;">Buat analisa AI</button>
+    <div id="aiStatus" style="margin-top:10px;"></div>
+    <div id="aiOutput" style="margin-top:10px; white-space:pre-wrap; line-height:1.7; font-size:14px;"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- raw data: XAU/USD around each FOMC decision (source: Twelve Data, daily) ---------------- */
+const RAW = [
+{date:"2020-01-29",type:"sched",note:"",prevDate:"2020-01-28",prevClose:1566.23999,decisionDate:"2020-01-29",decisionOpen:1566.20996,decisionHigh:1577.95996,decisionLow:1563.099976,decisionClose:1577.12,nextDate:"2020-01-30",nextClose:1574.21997},
+{date:"2020-03-03",type:"emer",note:"Pemangkasan darurat di luar jadwal, -50 bps",prevDate:"2020-03-02",prevClose:1590.72998,decisionDate:"2020-03-03",decisionOpen:1590.78003,decisionHigh:1649.5,decisionLow:1587.79004,decisionClose:1639.77002,nextDate:"2020-03-04",nextClose:1635.82996},
+{date:"2020-03-15",type:"emer",note:"Darurat akhir pekan: suku bunga ke 0-0.25%, QE besar-besaran",prevDate:"2020-03-13",prevClose:1529.69995,decisionDate:"2020-03-16",decisionOpen:1550.58997,decisionHigh:1573.48999,decisionLow:1451.68005,decisionClose:1514.60999,nextDate:"2020-03-17",nextClose:1528.57996},
+{date:"2020-04-29",type:"sched",note:"",prevDate:"2020-04-28",prevClose:1708.63,decisionDate:"2020-04-29",decisionOpen:1708.71997,decisionHigh:1717.52002,decisionLow:1697.71997,decisionClose:1712.38,nextDate:"2020-04-30",nextClose:1685.050049},
+{date:"2020-06-10",type:"sched",note:"",prevDate:"2020-06-09",prevClose:1714.56995,decisionDate:"2020-06-10",decisionOpen:1714.32996,decisionHigh:1740.29004,decisionLow:1708.82996,decisionClose:1737.099976,nextDate:"2020-06-11",nextClose:1727.51001},
+{date:"2020-07-29",type:"sched",note:"",prevDate:"2020-07-28",prevClose:1959.5,decisionDate:"2020-07-29",decisionOpen:1959.70996,decisionHigh:1980.67004,decisionLow:1944.95996,decisionClose:1970.72998,nextDate:"2020-07-30",nextClose:1960.5},
+{date:"2020-09-16",type:"sched",note:"",prevDate:"2020-09-15",prevClose:1955.52014,decisionDate:"2020-09-16",decisionOpen:1956.18506,decisionHigh:1973.625,decisionLow:1949.8855,decisionClose:1959.31824,nextDate:"2020-09-17",nextClose:1942.59998},
+{date:"2020-11-05",type:"sched",note:"",prevDate:"2020-11-04",prevClose:1903.20996,decisionDate:"2020-11-05",decisionOpen:1903.64502,decisionHigh:1952.95496,decisionLow:1902.42505,decisionClose:1948.56006,nextDate:"2020-11-06",nextClose:1951.51001},
+{date:"2020-12-16",type:"sched",note:"",prevDate:"2020-12-15",prevClose:1853.45996,decisionDate:"2020-12-16",decisionOpen:1853.94495,decisionHigh:1866.19995,decisionLow:1844.75,decisionClose:1864.14563,nextDate:"2020-12-17",nextClose:1885.86926},
+{date:"2021-01-27",type:"sched",note:"",prevDate:"2021-01-26",prevClose:1850.31006,decisionDate:"2021-01-27",decisionOpen:1850.64502,decisionHigh:1853.57996,decisionLow:1831.29004,decisionClose:1843.98999,nextDate:"2021-01-28",nextClose:1840.35999},
+{date:"2021-03-17",type:"sched",note:"",prevDate:"2021-03-16",prevClose:1730.93994,decisionDate:"2021-03-17",decisionOpen:1730.60999,decisionHigh:1751.81494,decisionLow:1724.13501,decisionClose:1744.43994,nextDate:"2021-03-18",nextClose:1736.4093},
+{date:"2021-04-28",type:"sched",note:"",prevDate:"2021-04-27",prevClose:1776.68994,decisionDate:"2021-04-28",decisionOpen:1776.79504,decisionHigh:1782.84998,decisionLow:1762.56494,decisionClose:1781.32373,nextDate:"2021-04-29",nextClose:1771.24329},
+{date:"2021-06-16",type:"sched",note:"Dot plot mengejutkan pasar (sinyal hawkish)",prevDate:"2021-06-15",prevClose:1858.69495,decisionDate:"2021-06-16",decisionOpen:1858.96497,decisionHigh:1862.42505,decisionLow:1804.19495,decisionClose:1811.95251,nextDate:"2021-06-17",nextClose:1773.31494},
+{date:"2021-07-28",type:"sched",note:"",prevDate:"2021-07-27",prevClose:1798.73206,decisionDate:"2021-07-28",decisionOpen:1799,decisionHigh:1809.90002,decisionLow:1792.59998,decisionClose:1806.88086,nextDate:"2021-07-29",nextClose:1827.95496},
+{date:"2021-09-22",type:"sched",note:"Sinyal tapering QE",prevDate:"2021-09-21",prevClose:1774.24622,decisionDate:"2021-09-22",decisionOpen:1774.51453,decisionHigh:1787.505,decisionLow:1764.84497,decisionClose:1767.91345,nextDate:"2021-09-23",nextClose:1742.57251},
+{date:"2021-11-03",type:"sched",note:"Tapering resmi diumumkan",prevDate:"2021-11-02",prevClose:1787.28113,decisionDate:"2021-11-03",decisionOpen:1787.71484,decisionHigh:1788.42285,decisionLow:1758.45496,decisionClose:1769.51624,nextDate:"2021-11-04",nextClose:1791.70496},
+{date:"2021-12-15",type:"sched",note:"Percepatan tapering",prevDate:"2021-12-14",prevClose:1770.17578,decisionDate:"2021-12-15",decisionOpen:1770.495,decisionHigh:1781.03772,decisionLow:1753.8396,decisionClose:1777.060059,nextDate:"2021-12-16",nextClose:1799.027222},
+{date:"2022-01-26",type:"sched",note:"",prevDate:"2022-01-25",prevClose:1847.56006,decisionDate:"2022-01-26",decisionOpen:1847.995,decisionHigh:1850.44202,decisionLow:1814.89502,decisionClose:1818.11707,nextDate:"2022-01-27",nextClose:1796.51001},
+{date:"2022-03-16",type:"sched",note:"Awal siklus kenaikan suku bunga (+25 bps)",prevDate:"2022-03-15",prevClose:1917.84265,decisionDate:"2022-03-16",decisionOpen:1918.095093,decisionHigh:1929.87,decisionLow:1895.22363,decisionClose:1927.9292,nextDate:"2022-03-17",nextClose:1942.64001},
+{date:"2022-05-04",type:"sched",note:"+50 bps",prevDate:"2022-05-03",prevClose:1867.78503,decisionDate:"2022-05-04",decisionOpen:1868.035034,decisionHigh:1889.745,decisionLow:1861.17004,decisionClose:1880.92285,nextDate:"2022-05-05",nextClose:1876.84082},
+{date:"2022-06-15",type:"sched",note:"+75 bps, kenaikan terbesar sejak 1994",prevDate:"2022-06-14",prevClose:1808.099976,decisionDate:"2022-06-15",decisionOpen:1808.35498,decisionHigh:1841.745,decisionLow:1807.23914,decisionClose:1833.37927,nextDate:"2022-06-16",nextClose:1856.70752},
+{date:"2022-07-27",type:"sched",note:"+75 bps",prevDate:"2022-07-26",prevClose:1717.00048828,decisionDate:"2022-07-27",decisionOpen:1717.41003,decisionHigh:1740.59998,decisionLow:1711.46448,decisionClose:1733.89221,nextDate:"2022-07-28",nextClose:1755.10815},
+{date:"2022-09-21",type:"sched",note:"+75 bps",prevDate:"2022-09-20",prevClose:1663.10889,decisionDate:"2022-09-21",decisionOpen:1663.67004,decisionHigh:1688.15002,decisionLow:1654.14502,decisionClose:1673.73682,nextDate:"2022-09-22",nextClose:1670.53455},
+{date:"2022-11-02",type:"sched",note:"+75 bps ke-4 berturut-turut",prevDate:"2022-11-01",prevClose:1647.5033,decisionDate:"2022-11-02",decisionOpen:1647.77002,decisionHigh:1669.60498,decisionLow:1634.40002,decisionClose:1634.88696,nextDate:"2022-11-03",nextClose:1629.15002},
+{date:"2022-12-14",type:"sched",note:"Laju kenaikan diperlambat ke +50 bps",prevDate:"2022-12-13",prevClose:1810.29004,decisionDate:"2022-12-14",decisionOpen:1810.48999,decisionHigh:1814.18506,decisionLow:1796.074951,decisionClose:1807.27002,nextDate:"2022-12-15",nextClose:1776.66003},
+{date:"2023-02-01",type:"sched",note:"+25 bps",prevDate:"2023-01-31",prevClose:1927.88,decisionDate:"2023-02-01",decisionOpen:1927.92004,decisionHigh:1954.63,decisionLow:1920.56006,decisionClose:1950.42004,nextDate:"2023-02-02",nextClose:1912.37},
+{date:"2023-03-22",type:"sched",note:"+25 bps, di tengah gejolak perbankan (SVB)",prevDate:"2023-03-21",prevClose:1940.14612,decisionDate:"2023-03-22",decisionOpen:1940.43506,decisionHigh:1978.92505,decisionLow:1934.32996,decisionClose:1969.58105,nextDate:"2023-03-23",nextClose:1993.5033},
+{date:"2023-05-03",type:"sched",note:"+25 bps",prevDate:"2023-05-02",prevClose:2016.27795,decisionDate:"2023-05-03",decisionOpen:2036.85999,decisionHigh:2080.71997,decisionLow:2030.33997,decisionClose:2051.11011,nextDate:"2023-05-04",nextClose:2051.1084},
+{date:"2023-06-14",type:"sched",note:"Jeda (skip) setelah 10x kenaikan beruntun",prevDate:"2023-06-13",prevClose:1943.32849,decisionDate:"2023-06-14",decisionOpen:1943.495,decisionHigh:1960.40503,decisionLow:1939.72546,decisionClose:1942.99036,nextDate:"2023-06-15",nextClose:1957.65479},
+{date:"2023-07-26",type:"sched",note:"+25 bps, kenaikan terakhir siklus ini",prevDate:"2023-07-25",prevClose:1964.5824,decisionDate:"2023-07-26",decisionOpen:1964.995,decisionHigh:1978.3147,decisionLow:1961.99451,decisionClose:1972.10315,nextDate:"2023-07-27",nextClose:1944.98621},
+{date:"2023-09-20",type:"sched",note:"",prevDate:"2023-09-19",prevClose:1930.94495,decisionDate:"2023-09-20",decisionOpen:1931.69495,decisionHigh:1947.79602,decisionLow:1927.9032,decisionClose:1929.68384,nextDate:"2023-09-21",nextClose:1919.56909},
+{date:"2023-11-01",type:"sched",note:"",prevDate:"2023-10-31",prevClose:1982.70496,decisionDate:"2023-11-01",decisionOpen:1983.014893,decisionHigh:1992.09375,decisionLow:1969.90405,decisionClose:1982.15002,nextDate:"2023-11-02",nextClose:1985.50696},
+{date:"2023-12-13",type:"sched",note:"Sinyal pivot dovish (dot plot 2024)",prevDate:"2023-12-12",prevClose:1979.4375,decisionDate:"2023-12-13",decisionOpen:1979.745,decisionHigh:2027.54504,decisionLow:1973.091675,decisionClose:2026.39001,nextDate:"2023-12-14",nextClose:2035.52795},
+{date:"2024-01-31",type:"sched",note:"",prevDate:"2024-01-30",prevClose:2036.11511,decisionDate:"2024-01-31",decisionOpen:2036.57996,decisionHigh:2056.078369,decisionLow:2031.0018311,decisionClose:2037.18994,nextDate:"2024-02-01",nextClose:2054.090088},
+{date:"2024-03-20",type:"sched",note:"",prevDate:"2024-03-19",prevClose:2157.22583,decisionDate:"2024-03-20",decisionOpen:2158.29492,decisionHigh:2188.89502,decisionLow:2149.59937,decisionClose:2185.9585,nextDate:"2024-03-21",nextClose:2180.80713},
+{date:"2024-05-01",type:"sched",note:"",prevDate:"2024-04-30",prevClose:2284.57495,decisionDate:"2024-05-01",decisionOpen:2285.90991,decisionHigh:2328.39502,decisionLow:2281.66016,decisionClose:2317.88257,nextDate:"2024-05-02",nextClose:2303.2876},
+{date:"2024-06-12",type:"sched",note:"",prevDate:"2024-06-11",prevClose:2316.86011,decisionDate:"2024-06-12",decisionOpen:2316.62012,decisionHigh:2341.67993,decisionLow:2310.82007,decisionClose:2324.97998,nextDate:"2024-06-13",nextClose:2303.93994},
+{date:"2024-07-31",type:"sched",note:"",prevDate:"2024-07-30",prevClose:2411.050049,decisionDate:"2024-07-31",decisionOpen:2409.73999,decisionHigh:2450.96997,decisionLow:2403.94995,decisionClose:2447.51001,nextDate:"2024-08-01",nextClose:2446.3999},
+{date:"2024-09-18",type:"sched",note:"Awal siklus pemangkasan, -50 bps",prevDate:"2024-09-17",prevClose:2569.58008,decisionDate:"2024-09-18",decisionOpen:2569.48999,decisionHigh:2600.15991,decisionLow:2547.15991,decisionClose:2559.37988,nextDate:"2024-09-19",nextClose:2586.78003},
+{date:"2024-11-07",type:"sched",note:"-25 bps",prevDate:"2024-11-06",prevClose:2667.15991,decisionDate:"2024-11-07",decisionOpen:2667.15991,decisionHigh:2700.38989,decisionLow:2643.77002,decisionClose:2694.44995,nextDate:"2024-11-08",nextClose:2687.18994},
+{date:"2024-12-18",type:"sched",note:"-25 bps",prevDate:"2024-12-17",prevClose:2645.40991,decisionDate:"2024-12-18",decisionOpen:2645.44995,decisionHigh:2651.80005,decisionLow:2604.28003,decisionClose:2604.28003,nextDate:"2024-12-19",nextClose:2596.8501},
+{date:"2025-01-29",type:"sched",note:"",prevDate:"2025-01-28",prevClose:2764.87012,decisionDate:"2025-01-29",decisionOpen:2764.8501,decisionHigh:2766.30005,decisionLow:2744.90991,decisionClose:2755.32007,nextDate:"2025-01-30",nextClose:2793.54004},
+{date:"2025-03-19",type:"sched",note:"",prevDate:"2025-03-18",prevClose:3035.52002,decisionDate:"2025-03-19",decisionOpen:3035.77002,decisionHigh:3051.98999,decisionLow:3022.95996,decisionClose:3047.87988,nextDate:"2025-03-20",nextClose:3044.82007},
+{date:"2025-05-07",type:"sched",note:"",prevDate:"2025-05-06",prevClose:3434.7,decisionDate:"2025-05-07",decisionOpen:3435,decisionHigh:3440.4,decisionLow:3360.23,decisionClose:3366.6,nextDate:"2025-05-08",nextClose:3309.4},
+{date:"2025-06-18",type:"sched",note:"",prevDate:"2025-06-17",prevClose:3387.3,decisionDate:"2025-06-18",decisionOpen:3388.7,decisionHigh:3399.98,decisionLow:3362.68994,decisionClose:3372.1,nextDate:"2025-06-19",nextClose:3381.2},
+{date:"2025-07-30",type:"sched",note:"",prevDate:"2025-07-29",prevClose:3334.24,decisionDate:"2025-07-30",decisionOpen:3334.23,decisionHigh:3340.28,decisionLow:3283,decisionClose:3291.98,nextDate:"2025-07-31",nextClose:3299.41},
+{date:"2025-09-17",type:"sched",note:"",prevDate:"2025-09-16",prevClose:3696.78,decisionDate:"2025-09-17",decisionOpen:3696.78,decisionHigh:3708.49,decisionLow:3657.59,decisionClose:3664.37,nextDate:"2025-09-18",nextClose:3647.61},
+{date:"2025-10-29",type:"sched",note:"",prevDate:"2025-10-28",prevClose:3967.98,decisionDate:"2025-10-29",decisionOpen:3967.97,decisionHigh:4031.43,decisionLow:3930.08,decisionClose:3949.3,nextDate:"2025-10-30",nextClose:4020.42},
+{date:"2025-12-10",type:"sched",note:"",prevDate:"2025-12-09",prevClose:4212.89339,decisionDate:"2025-12-10",decisionOpen:4212.73084,decisionHigh:4219.56716,decisionLow:4182.65249,decisionClose:4215.85221,nextDate:"2025-12-11",nextClose:4273.56204},
+{date:"2026-01-28",type:"sched",note:"",prevDate:"2026-01-27",prevClose:5099.19537,decisionDate:"2026-01-28",decisionOpen:5099.1982,decisionHigh:5329.23026,decisionLow:5098.86184,decisionClose:5327.17903,nextDate:"2026-01-29",nextClose:5310.53137},
+{date:"2026-03-18",type:"sched",note:"",prevDate:"2026-03-17",prevClose:4998.9783,decisionDate:"2026-03-18",decisionOpen:4998.63708,decisionHigh:5016.82098,decisionLow:4837.58291,decisionClose:4841.92773,nextDate:"2026-03-19",nextClose:4637.62973},
+{date:"2026-04-29",type:"sched",note:"",prevDate:"2026-04-28",prevClose:4596.47098,decisionDate:"2026-04-29",decisionOpen:4596.3843,decisionHigh:4609.97231,decisionLow:4511.1187,decisionClose:4543.91802,nextDate:"2026-04-30",nextClose:4621.32118},
+{date:"2026-06-17",type:"sched",note:"",prevDate:"2026-06-16",prevClose:4331.36946,decisionDate:"2026-06-17",decisionOpen:4331.25761,decisionHigh:4383.61801,decisionLow:4220.01613,decisionClose:4258.07298,nextDate:"2026-06-18",nextClose:4209.12291},
+{date:"2026-07-29",type:"sched",note:"",prevDate:"2026-07-28",prevClose:4028.58082,decisionDate:"2026-07-29",decisionOpen:4028.68301,decisionHigh:4114.04122,decisionLow:3996.32338,decisionClose:4066.93415,nextDate:"2026-07-30",nextClose:4103.49754},
+{date:"2026-09-16",type:"future",note:"Rapat berjalan / belum ada data penutupan",prevDate:"2026-09-15",prevClose:4293.79613,decisionDate:null,decisionOpen:null,decisionHigh:null,decisionLow:null,decisionClose:null,nextDate:null,nextClose:null},
+{date:"2026-10-28",type:"future",note:"Rapat mendatang",prevDate:null,prevClose:null,decisionDate:null,decisionOpen:null,decisionHigh:null,decisionLow:null,decisionClose:null,nextDate:null,nextClose:null},
+{date:"2026-12-09",type:"future",note:"Rapat mendatang",prevDate:null,prevClose:null,decisionDate:null,decisionOpen:null,decisionHigh:null,decisionLow:null,decisionClose:null,nextDate:null,nextClose:null},
+];
+
+const MONTHS_ID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+const DATA = RAW.map(r=>{
+  const [y,m,d] = r.date.split("-").map(Number);
+  const changeNext = (r.nextClose!=null && r.prevClose!=null) ? r.nextClose - r.prevClose : null;
+  const changeDecision = (r.decisionClose!=null && r.prevClose!=null) ? r.decisionClose - r.prevClose : null;
+  const rangeDay = (r.decisionHigh!=null && r.decisionLow!=null) ? r.decisionHigh - r.decisionLow : null;
+  return Object.assign({}, r, {
+    year:String(y), month:m, monthName:MONTHS_ID[m-1],
+    changeNext, changeDecision, rangeDay,
+    hasData: r.decisionClose!=null,
+    dir: changeNext==null ? null : (changeNext>0 ? "up" : (changeNext<0 ? "down" : "flat"))
+  });
+});
+
+/* ---------------- state ---------------- */
+const state = { year:"all", month:"all" };
+
+function fmt(n, dp){ if(n==null||isNaN(n)) return "&mdash;"; return n.toLocaleString("en-US",{minimumFractionDigits:dp!=null?dp:2, maximumFractionDigits:dp!=null?dp:2}); }
+function fmtSigned(n, dp){ if(n==null||isNaN(n)) return "&mdash;"; const s=n>=0?"+":""; return s+fmt(n,dp); }
+function pointSize(){ return parseFloat(document.getElementById("pointSize").value) || 0.01; }
+function toPoints(usd){ return usd / pointSize(); }
+function dateID(iso){ if(!iso) return "&mdash;"; const [y,m,d]=iso.split("-"); return d+" "+MONTHS_ID[+m-1].slice(0,3)+" "+y; }
+
+function filtered(){
+  return DATA.filter(r => (state.year==="all"||r.year===state.year) && (state.month==="all"||String(r.month)===state.month));
+}
+
+/* ---------------- filters ---------------- */
+function initFilters(){
+  const years = Array.from(new Set(DATA.map(d=>d.year))).sort();
+  const yearSel = document.getElementById("yearSel");
+  years.forEach(y=>{ const o=document.createElement("option"); o.value=y; o.textContent=y; yearSel.appendChild(o); });
+  const monthSel = document.getElementById("monthSel");
+  MONTHS_ID.forEach((m,i)=>{ const o=document.createElement("option"); o.value=String(i+1); o.textContent=m; monthSel.appendChild(o); });
+
+  yearSel.addEventListener("change",()=>{ state.year=yearSel.value; renderAll(); });
+  monthSel.addEventListener("change",()=>{ state.month=monthSel.value; renderAll(); });
+  document.getElementById("resetFilter").addEventListener("click",()=>{
+    state.year="all"; state.month="all"; yearSel.value="all"; monthSel.value="all"; renderAll();
+  });
+}
+
+/* ---------------- tabs ---------------- */
+function initTabs(){
+  const tabs = document.querySelectorAll(".tab");
+  tabs.forEach(t=>{
+    t.addEventListener("click",()=>{ activateTab(t.dataset.panel); });
+  });
+}
+function activateTab(panel){
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x.dataset.panel===panel ? "true":"false"));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+panel).classList.add("active");
+}
+
+/* ---------------- theme toggle ---------------- */
+function initTheme(){
+  const root = document.documentElement;
+  const btn = document.getElementById("themeToggle");
+  btn.addEventListener("click",()=>{
+    const cur = root.getAttribute("data-theme");
+    const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    let next;
+    if(!cur){ next = sysDark ? "light" : "dark"; }
+    else if(cur==="dark"){ next="light"; }
+    else { next="dark"; }
+    root.setAttribute("data-theme", next);
+  });
+}
+
+/* ---------------- overview: stat tiles ---------------- */
+function renderStats(){
+  const rows = filtered().filter(r=>r.changeNext!=null);
+  const tiles = document.getElementById("statTiles");
+  if(rows.length===0){
+    tiles.innerHTML = '<div class="tile"><div class="label">Data</div><div class="value" style="font-size:15px;">Tidak ada rapat dengan data pada filter ini</div></div>';
+    return;
+  }
+  const ups = rows.filter(r=>r.dir==="up").length;
+  const downs = rows.filter(r=>r.dir==="down").length;
+  const avgMovePts = toPoints(rows.reduce((s,r)=>s+Math.abs(r.changeNext),0)/rows.length);
+  const avgRangePts = toPoints(rows.reduce((s,r)=>s+r.rangeDay,0)/rows.length);
+  const mean = rows.reduce((s,r)=>s+r.changeNext,0)/rows.length;
+  const variance = rows.reduce((s,r)=>s+Math.pow(r.changeNext-mean,2),0)/rows.length;
+  const stdevPts = toPoints(Math.sqrt(variance));
+  const biggestUp = rows.reduce((a,b)=> (b.changeNext>(a?a.changeNext:-Infinity))?b:a, null);
+  const biggestDown = rows.reduce((a,b)=> (b.changeNext<(a?a.changeNext:Infinity))?b:a, null);
+
+  tiles.innerHTML = `
+    <div class="tile"><div class="label">Jumlah rapat</div><div class="value num">${rows.length}</div><div class="sub">dalam filter aktif</div></div>
+    <div class="tile up"><div class="label">Naik</div><div class="value num">${ups}&times;</div><div class="sub">${(ups/rows.length*100).toFixed(0)}% dari rapat</div></div>
+    <div class="tile down"><div class="label">Turun</div><div class="value num">${downs}&times;</div><div class="sub">${(downs/rows.length*100).toFixed(0)}% dari rapat</div></div>
+    <div class="tile"><div class="label">Rata-rata pergerakan</div><div class="value num">${fmt(avgMovePts,0)} poin</div><div class="sub">|sebelum &rarr; keesokan hari|</div></div>
+    <div class="tile"><div class="label">Rata-rata range hari-H</div><div class="value num">${fmt(avgRangePts,0)} poin</div><div class="sub">high &minus; low</div></div>
+    <div class="tile"><div class="label">Volatilitas (stdev)</div><div class="value num">${fmt(stdevPts,0)} poin</div><div class="sub">sebaran perubahan harga</div></div>
+    <div class="tile up"><div class="label">Kenaikan terbesar</div><div class="value num">+${fmt(toPoints(biggestUp.changeNext),0)}</div><div class="sub">${dateID(biggestUp.date)}</div></div>
+    <div class="tile down"><div class="label">Penurunan terbesar</div><div class="value num">${fmt(toPoints(biggestDown.changeNext),0)}</div><div class="sub">${dateID(biggestDown.date)}</div></div>
+  `;
+  document.getElementById("dataRange").textContent = "Data harga: " + dateID(DATA[0].date) + " s/d " + dateID(DATA[DATA.length-1].date);
+}
+
+/* ---------------- overview: bar chart ---------------- */
+function renderChart(){
+  const rows = filtered();
+  const svg = document.getElementById("barChart");
+  const tip = document.getElementById("barTip");
+  const W=1000,H=340, padL=64,padR=16,padT=16,padB=54;
+  const plotW = W-padL-padR, plotH = H-padT-padB;
+  const withData = rows.filter(r=>r.changeNext!=null);
+  const maxAbs = Math.max(1, ...withData.map(r=>Math.abs(toPoints(r.changeNext))));
+  const n = rows.length;
+  const gap = 4;
+  const bw = n>0 ? Math.max(2,(plotW - gap*(n-1))/n) : plotW;
+  const yZero = padT + plotH/2;
+  const scaleY = (plotH/2 - 10) / maxAbs;
+
+  let svgHTML = "";
+  // gridlines
+  [-1,-0.5,0,0.5,1].forEach(f=>{
+    const y = yZero - f*maxAbs*scaleY;
+    svgHTML += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--hair)" stroke-width="1"/>`;
+    svgHTML += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="11">${fmt(f*maxAbs,0)}</text>`;
+  });
+  svgHTML += `<line x1="${padL}" y1="${yZero}" x2="${W-padR}" y2="${yZero}" stroke="var(--hair-strong)" stroke-width="1.5"/>`;
+
+  const labelEvery = Math.max(1, Math.ceil(n/14));
+  rows.forEach((r,i)=>{
+    const x = padL + i*(bw+gap);
+    if(r.changeNext==null){
+      const h = 6;
+      svgHTML += `<rect data-i="${i}" x="${x}" y="${yZero-h/2}" width="${bw}" height="${h}" rx="2" fill="var(--ink-mute)" opacity="0.5"></rect>`;
+    } else {
+      const pts = toPoints(r.changeNext);
+      const h = Math.max(2, Math.abs(pts)*scaleY);
+      const y = pts>=0 ? yZero-h : yZero;
+      const color = pts>=0 ? "var(--up)" : "var(--down)";
+      svgHTML += `<rect data-i="${i}" x="${x}" y="${y}" width="${bw}" height="${h}" rx="2" fill="${color}"></rect>`;
+    }
+  });
+  // x labels (rotated, sparse)
+  rows.forEach((r,i)=>{
+    if(i%labelEvery===0 || n<=14){
+      const x = padL + i*(bw+gap) + bw/2;
+      const [y,m,d] = r.date.split("-");
+      svgHTML += `<text x="${x}" y="${H-padB+26}" text-anchor="end" font-size="10" transform="rotate(-55 ${x} ${H-padB+26})">${d}/${m}/${y.slice(2)}</text>`;
+    }
+  });
+  svg.innerHTML = svgHTML;
+
+  svg.querySelectorAll("rect[data-i]").forEach(rect=>{
+    rect.style.cursor="pointer";
+    rect.addEventListener("mousemove",(e)=>{
+      const r = rows[+rect.dataset.i];
+      const txt = r.changeNext==null
+        ? `${dateID(r.date)} &mdash; belum ada data`
+        : `${dateID(r.date)}: ${fmtSigned(toPoints(r.changeNext),0)} poin`;
+      tip.innerHTML = txt;
+      const bbox = svg.getBoundingClientRect();
+      tip.style.left = (e.clientX-bbox.left)+"px";
+      tip.style.top = (e.clientY-bbox.top)+"px";
+      tip.style.opacity = 1;
+    });
+    rect.addEventListener("mouseleave",()=>{ tip.style.opacity=0; });
+  });
+}
+
+/* ---------------- calendar table ---------------- */
+function renderCalendar(){
+  const rows = filtered();
+  const tbody = document.getElementById("calTbody");
+  tbody.innerHTML = rows.map(r=>{
+    const badge = r.type==="emer" ? '<span class="badge emer">Darurat</span>'
+                : r.type==="future" ? '<span class="badge future">Mendatang</span>'
+                : '<span class="badge sched">Terjadwal</span>';
+    const dirLabel = r.dir==="up" ? '<span class="dir-up">&#9650; Naik</span>'
+                    : r.dir==="down" ? '<span class="dir-down">&#9660; Turun</span>'
+                    : r.dir==="flat" ? '<span class="dir-flat">Datar</span>'
+                    : '<span class="dir-flat">&mdash;</span>';
+    return `<tr>
+      <td class="num">${dateID(r.date)}</td>
+      <td>${badge}</td>
+      <td class="num">${fmt(r.prevClose)}</td>
+      <td class="num">${fmt(r.decisionOpen)}</td>
+      <td class="num">${fmt(r.decisionHigh)}</td>
+      <td class="num">${fmt(r.decisionLow)}</td>
+      <td class="num">${fmt(r.decisionClose)}</td>
+      <td class="num">${fmt(r.nextClose)}</td>
+      <td class="num">${r.rangeDay!=null?fmt(toPoints(r.rangeDay),0)+" pt":"&mdash;"}</td>
+      <td class="num">${r.changeNext!=null?fmtSigned(toPoints(r.changeNext),0)+" pt":"&mdash;"}</td>
+      <td>${dirLabel}</td>
+      <td class="note-cell">${r.note||""}</td>
+    </tr>`;
+  }).join("");
+}
+
+/* ---------------- instrument presets ---------------- */
+const PRESETS = [
+  {label:"XAU/USD (Emas)", contract:100, point:0.01},
+  {label:"EUR/USD", contract:100000, point:0.0001},
+  {label:"GBP/USD", contract:100000, point:0.0001},
+  {label:"USD/JPY", contract:100000, point:0.01},
+];
+function initPresets(){
+  const row = document.getElementById("instrumentPresets");
+  row.innerHTML = PRESETS.map((p,i)=>`<button type="button" class="chip" data-i="${i}" aria-pressed="${i===0}">${p.label}</button>`).join("");
+  row.querySelectorAll(".chip").forEach(chip=>{
+    chip.addEventListener("click",()=>{
+      row.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+      chip.setAttribute("aria-pressed","true");
+      const p = PRESETS[+chip.dataset.i];
+      document.getElementById("contractSize").value = p.contract;
+      document.getElementById("pointSize").value = p.point;
+      renderAll();
+    });
+  });
+}
+
+/* ---------------- lot calculator ---------------- */
+function pointValue(){
+  const contract = parseFloat(document.getElementById("contractSize").value)||100;
+  const pt = pointSize();
+  const lot = parseFloat(document.getElementById("lotSize").value)||0.01;
+  return pt * contract * lot; // USD per 1 point move, for this lot size
+}
+function renderCalc(){
+  const dir = document.getElementById("calcDir").value;
+  const entry = parseFloat(document.getElementById("calcEntry").value);
+  const sl = parseFloat(document.getElementById("calcSL").value);
+  const tp = parseFloat(document.getElementById("calcTP").value);
+  const pv = pointValue();
+  const pt = pointSize();
+  const box = document.getElementById("calcResult");
+  const warn = document.getElementById("calcWarn");
+  warn.innerHTML = "";
+
+  if(isNaN(entry)||isNaN(sl)||isNaN(tp)){ box.innerHTML = "Lengkapi entry, SL, dan TP."; return; }
+
+  const validSL = dir==="buy" ? sl < entry : sl > entry;
+  const validTP = dir==="buy" ? tp > entry : tp < entry;
+  if(!validSL || !validTP){
+    warn.innerHTML = `<div class="warn-box">Untuk posisi ${dir.toUpperCase()}, pastikan SL berada di ${dir==="buy"?"bawah":"atas"} entry dan TP di ${dir==="buy"?"atas":"bawah"} entry.</div>`;
+  }
+
+  const slPoints = Math.abs(entry-sl)/pt;
+  const tpPoints = Math.abs(tp-entry)/pt;
+  const risk = slPoints * pv;
+  const reward = tpPoints * pv;
+  const rr = risk>0 ? reward/risk : 0;
+
+  box.innerHTML = `
+    <div class="result-row"><span class="k">Jarak ke SL</span><span class="v num">${fmt(slPoints,0)} poin</span></div>
+    <div class="result-row"><span class="k">Jarak ke TP</span><span class="v num">${fmt(tpPoints,0)} poin</span></div>
+    <div class="result-row"><span class="k">Nilai per poin (lot ${fmt(parseFloat(document.getElementById("lotSize").value),2)})</span><span class="v num">$${fmt(pv,2)}</span></div>
+    <div class="result-row"><span class="k">Potensi rugi jika SL kena</span><span class="v num" style="color:var(--down)">&minus;$${fmt(risk,2)}</span></div>
+    <div class="result-row"><span class="k">Potensi profit jika TP kena</span><span class="v num" style="color:var(--up)">+$${fmt(reward,2)}</span></div>
+    <div class="result-row"><span class="k">Rasio Risk:Reward</span><span class="v num">1 : ${fmt(rr,2)}</span></div>
+  `;
+  renderCapital(risk);
+}
+function renderCapital(riskUsd){
+  const pct = parseFloat(document.getElementById("riskPct").value)||1;
+  const box = document.getElementById("capitalResult");
+  const entry = parseFloat(document.getElementById("calcEntry").value)||0;
+  const contract = parseFloat(document.getElementById("contractSize").value)||100;
+  const lot = parseFloat(document.getElementById("lotSize").value)||0.01;
+  const leverage = parseFloat(document.getElementById("leverage").value)||1;
+  const requiredCapital = riskUsd>0 ? riskUsd/(pct/100) : 0;
+  const notional = entry*contract*lot;
+  const margin = leverage>0 ? notional/leverage : notional;
+  box.innerHTML = `
+    <div class="result-row"><span class="k">Modal minimum disarankan (agar risiko = ${fmt(pct,1)}% modal)</span><span class="v num">$${fmt(requiredCapital,2)}</span></div>
+    <div class="result-row"><span class="k">Nilai kontrak (notional)</span><span class="v num">$${fmt(notional,2)}</span></div>
+    <div class="result-row"><span class="k">Estimasi margin dibutuhkan (leverage 1:${fmt(leverage,0)})</span><span class="v num">$${fmt(margin,2)}</span></div>
+  `;
+}
+
+/* ---------------- buy/sell stop simulator ---------------- */
+function initSimEvents(){
+  const sel = document.getElementById("simEvent");
+  sel.innerHTML = filtered().map(r=>`<option value="${r.date}">${dateID(r.date)}${r.type==="emer"?" (darurat)":r.type==="future"?" (mendatang)":""}</option>`).join("");
+  if(sel.options.length===0){ sel.innerHTML = '<option value="">Tidak ada rapat pada filter ini</option>'; }
+  sel.onchange = ()=>{ fillSimDefaults(); renderSim(); };
+}
+function avgRangePointsAll(){
+  const withRange = DATA.filter(r=>r.rangeDay!=null);
+  return withRange.reduce((s,r)=>s+toPoints(r.rangeDay),0)/withRange.length;
+}
+function fillSimDefaults(){
+  const date = document.getElementById("simEvent").value;
+  const ev = DATA.find(r=>r.date===date);
+  if(!ev || ev.prevClose==null) return;
+  const halfRange = (avgRangePointsAll()/2) * pointSize();
+  document.getElementById("simRangeHigh").value = (ev.prevClose + halfRange).toFixed(2);
+  document.getElementById("simRangeLow").value = (ev.prevClose - halfRange).toFixed(2);
+}
+function renderSim(){
+  const date = document.getElementById("simEvent").value;
+  const ev = DATA.find(r=>r.date===date);
+  const pt = pointSize();
+  const rangeHigh = parseFloat(document.getElementById("simRangeHigh").value);
+  const rangeLow = parseFloat(document.getElementById("simRangeLow").value);
+  const buffer = (parseFloat(document.getElementById("simBuffer").value)||0)*pt;
+  const slDist = (parseFloat(document.getElementById("simSL").value)||0)*pt;
+  const rr = parseFloat(document.getElementById("simRR").value)||1;
+  const lot = parseFloat(document.getElementById("simLot").value)||0.01;
+  const contract = parseFloat(document.getElementById("contractSize").value)||100;
+  const pv = pt*contract*lot;
+
+  const lvlBox = document.getElementById("simLevels");
+  const resBox = document.getElementById("simResult");
+  const flagBox = document.getElementById("simFlag");
+  flagBox.innerHTML = "";
+
+  if(!ev || isNaN(rangeHigh) || isNaN(rangeLow)){
+    lvlBox.innerHTML = "Pilih rapat FOMC dan lengkapi range harga.";
+    resBox.innerHTML = "";
+    return;
+  }
+
+  const buyStop = rangeHigh + buffer;
+  const sellStop = rangeLow - buffer;
+  const buySL = buyStop - slDist, buyTP = buyStop + slDist*rr;
+  const sellSL = sellStop + slDist, sellTP = sellStop - slDist*rr;
+
+  lvlBox.innerHTML = `
+    <b>BUY STOP</b> @ ${fmt(buyStop)} &middot; SL ${fmt(buySL)} &middot; TP ${fmt(buyTP)}<br>
+    <b>SELL STOP</b> @ ${fmt(sellStop)} &middot; SL ${fmt(sellSL)} &middot; TP ${fmt(sellTP)}<br>
+    Risiko per sisi: ${fmt(slDist/pt,0)} poin &asymp; $${fmt((slDist/pt)*pv,2)} (lot ${fmt(lot,2)})
+  `;
+
+  if(!ev.hasData){
+    resBox.innerHTML = "Rapat ini belum memiliki data harga (mendatang / sedang berlangsung).";
+    return;
+  }
+
+  const hiHit = ev.decisionHigh >= buyStop;
+  const loHit = ev.decisionLow <= sellStop;
+  let html = "";
+  let triggered = null;
+
+  if(hiHit && loHit){
+    flagBox.innerHTML = `<div class="warn-box">Kedua level tersentuh pada hari yang sama &mdash; data harian tidak bisa memastikan urutan mana yang tereksekusi lebih dulu (kemungkinan whipsaw di sekitar rilis). Dalam OCO riil, hanya satu sisi yang aktif sesuai urutan sebenarnya.</div>`;
+    triggered = ev.decisionClose >= (buyStop+sellStop)/2 ? "buy" : "sell";
+  } else if(hiHit){ triggered = "buy"; }
+  else if(loHit){ triggered = "sell"; }
+
+  if(!triggered){
+    resBox.innerHTML = `Tidak ada sisi yang tersentuh pada hari-H (high ${fmt(ev.decisionHigh)} / low ${fmt(ev.decisionLow)} tidak menembus level order). Order akan tetap pending.`;
+    return;
+  }
+
+  const entry = triggered==="buy" ? buyStop : sellStop;
+  const sl = triggered==="buy" ? buySL : sellSL;
+  const tp = triggered==="buy" ? buyTP : sellTP;
+  const tpHit = triggered==="buy" ? ev.decisionHigh>=tp : ev.decisionLow<=tp;
+  const slHit = triggered==="buy" ? ev.decisionLow<=sl : ev.decisionHigh>=sl;
+
+  let outcome, pnlPoints, pnlUsd, outcomeClass;
+  if(tpHit && !slHit){ outcome="TP tersentuh (profit)"; pnlPoints=slDist/pt*rr; pnlUsd=pnlPoints*pv; outcomeClass="ok-box"; }
+  else if(slHit && !tpHit){ outcome="SL tersentuh (rugi)"; pnlPoints=-(slDist/pt); pnlUsd=pnlPoints*pv; outcomeClass="warn-box"; }
+  else if(tpHit && slHit){ outcome="TP dan SL sama-sama masuk range hari itu &mdash; urutan tak pasti dari data harian"; pnlPoints=null; pnlUsd=null; outcomeClass="warn-box"; }
+  else {
+    const settle = ev.nextClose;
+    pnlPoints = triggered==="buy" ? (settle-entry)/pt : (entry-settle)/pt;
+    pnlUsd = pnlPoints*pv;
+    outcome = "Belum kena TP/SL hari itu &mdash; posisi mengambang, dinilai di penutupan keesokan hari";
+    outcomeClass = pnlUsd>=0 ? "ok-box" : "warn-box";
+  }
+
+  resBox.innerHTML = `
+    <div class="result-row"><span class="k">Sisi yang aktif</span><span class="v">${triggered.toUpperCase()} STOP</span></div>
+    <div class="result-row"><span class="k">Entry</span><span class="v num">${fmt(entry)}</span></div>
+    <div class="result-row"><span class="k">High/Low hari-H</span><span class="v num">${fmt(ev.decisionHigh)} / ${fmt(ev.decisionLow)}</span></div>
+    <div class="result-row"><span class="k">Hasil</span><span class="v">${outcome}</span></div>
+    ${pnlUsd!=null?`<div class="result-row"><span class="k">Estimasi P/L</span><span class="v num" style="color:${pnlUsd>=0?'var(--up)':'var(--down)'}">${fmtSigned(pnlPoints,0)} poin &asymp; ${pnlUsd>=0?'+':''}$${fmt(pnlUsd,2)}</span></div>`:""}
+  `;
+  flagBox.innerHTML += `<div class="${outcomeClass}">${outcome}</div>`;
+}
+
+function renderSimStats(){
+  const rows = filtered().filter(r=>r.hasData);
+  const buffer = (parseFloat(document.getElementById("simBuffer").value)||0)*pointSize();
+  const slDistPts = parseFloat(document.getElementById("simSL").value)||0;
+  const slDist = slDistPts*pointSize();
+  const rr = parseFloat(document.getElementById("simRR").value)||1;
+  let buyCount=0, sellCount=0, bothCount=0, noneCount=0, tpCount=0, slCount=0;
+  rows.forEach(r=>{
+    const halfRange = (toPoints(r.rangeDay)/2)*pointSize();
+    const rangeHigh = r.prevClose+halfRange, rangeLow = r.prevClose-halfRange;
+    const buyStop = rangeHigh+buffer, sellStop = rangeLow-buffer;
+    const hiHit = r.decisionHigh>=buyStop, loHit = r.decisionLow<=sellStop;
+    if(hiHit&&loHit) bothCount++;
+    else if(hiHit){ buyCount++; if(r.decisionHigh>=buyStop+slDist*rr) tpCount++; else if(r.decisionLow<=buyStop-slDist) slCount++; }
+    else if(loHit){ sellCount++; if(r.decisionLow<=sellStop-slDist*rr) tpCount++; else if(r.decisionHigh>=sellStop+slDist) slCount++; }
+    else noneCount++;
+  });
+  const total = rows.length || 1;
+  document.getElementById("simStatsTiles").innerHTML = `
+    <div class="tile up"><div class="label">Breakout ke atas (Buy Stop)</div><div class="value num">${buyCount}&times;</div><div class="sub">${(buyCount/total*100).toFixed(0)}% rapat</div></div>
+    <div class="tile down"><div class="label">Breakout ke bawah (Sell Stop)</div><div class="value num">${sellCount}&times;</div><div class="sub">${(sellCount/total*100).toFixed(0)}% rapat</div></div>
+    <div class="tile"><div class="label">Kedua sisi tersentuh</div><div class="value num">${bothCount}&times;</div><div class="sub">whipsaw / tak pasti urutan</div></div>
+    <div class="tile"><div class="label">Tidak breakout</div><div class="value num">${noneCount}&times;</div><div class="sub">order tetap pending</div></div>
+    <div class="tile up"><div class="label">Estimasi kena TP</div><div class="value num">${tpCount}&times;</div><div class="sub">dari sisi yang aktif</div></div>
+    <div class="tile down"><div class="label">Estimasi kena SL</div><div class="value num">${slCount}&times;</div><div class="sub">dari sisi yang aktif</div></div>
+  `;
+}
+
+/* ---------------- monthly view (always full 2020-2026, ignores year/month filter) ---------------- */
+function monthlyGroupsAll(){
+  const groups = Array.from({length:12}, ()=>[]);
+  DATA.forEach(r=> groups[r.month-1].push(r));
+  groups.forEach(g=>g.sort((a,b)=> a.year<b.year?-1:(a.year>b.year?1:(a.date<b.date?-1:1))));
+  return groups;
+}
+function renderMonthlyChart(){
+  const groups = monthlyGroupsAll();
+  const svg = document.getElementById("monthlyChart");
+  const tip = document.getElementById("monthlyTip");
+  const W=1000,H=380,padL=64,padR=16,padT=16,padB=40;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const groupGap=14, barGap=3;
+  const groupW = (plotW - groupGap*11)/12;
+  const maxEntries = Math.max(1, ...groups.map(g=>g.length));
+  const barW = Math.max(2, (groupW - (maxEntries-1)*barGap)/maxEntries);
+  const withData = groups.flat().filter(r=>r.changeNext!=null);
+  const maxAbs = Math.max(1, ...withData.map(r=>Math.abs(toPoints(r.changeNext))));
+  const yZero = padT + plotH/2;
+  const scaleY = (plotH/2 - 10)/maxAbs;
+
+  let html="";
+  [-1,-0.5,0,0.5,1].forEach(f=>{
+    const y = yZero - f*maxAbs*scaleY;
+    html += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--hair)" stroke-width="1"/>`;
+    html += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="11">${fmt(f*maxAbs,0)}</text>`;
+  });
+  html += `<line x1="${padL}" y1="${yZero}" x2="${W-padR}" y2="${yZero}" stroke="var(--hair-strong)" stroke-width="1.5"/>`;
+
+  groups.forEach((g,gi)=>{
+    const groupX = padL + gi*(groupW+groupGap);
+    const usedW = g.length*barW + Math.max(0,g.length-1)*barGap;
+    const startX = groupX + (groupW-usedW)/2;
+    g.forEach((r,i)=>{
+      const x = startX + i*(barW+barGap);
+      if(r.changeNext==null){
+        const h=6;
+        html += `<rect data-g="${gi}" data-i="${i}" x="${x}" y="${yZero-h/2}" width="${barW}" height="${h}" rx="1.5" fill="var(--ink-mute)" opacity="0.5"></rect>`;
+      } else {
+        const pts = toPoints(r.changeNext);
+        const h = Math.max(2, Math.abs(pts)*scaleY);
+        const y = pts>=0 ? yZero-h : yZero;
+        const color = pts>=0 ? "var(--up)" : "var(--down)";
+        html += `<rect data-g="${gi}" data-i="${i}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="1.5" fill="${color}"></rect>`;
+      }
+    });
+    html += `<text x="${groupX+groupW/2}" y="${H-padB+20}" text-anchor="middle" font-size="11">${MONTHS_ID[gi].slice(0,3)}</text>`;
+  });
+
+  svg.innerHTML = html;
+  svg.querySelectorAll("rect[data-g]").forEach(rect=>{
+    rect.addEventListener("mousemove",(e)=>{
+      const g = groups[+rect.dataset.g][+rect.dataset.i];
+      tip.innerHTML = g.changeNext!=null
+        ? `${dateID(g.date)}: ${fmtSigned(toPoints(g.changeNext),0)} poin`
+        : `${dateID(g.date)}: belum ada data`;
+      const bbox = svg.getBoundingClientRect();
+      tip.style.left=(e.clientX-bbox.left)+"px"; tip.style.top=(e.clientY-bbox.top)+"px"; tip.style.opacity=1;
+    });
+    rect.addEventListener("mouseleave",()=>{ tip.style.opacity=0; });
+  });
+}
+function renderMonthlyTable(){
+  const groups = monthlyGroupsAll();
+  const tbody = document.getElementById("monthlyTbody");
+  const maxAbs = Math.max(1, ...DATA.filter(r=>r.changeNext!=null).map(r=>Math.abs(toPoints(r.changeNext))));
+  let rowsHtml = "";
+  groups.forEach((g,gi)=>{
+    g.forEach((r,i)=>{
+      const badge = r.type==="emer" ? '<span class="badge emer">Darurat</span>'
+                  : r.type==="future" ? '<span class="badge future">Mendatang</span>'
+                  : '<span class="badge sched">Terjadwal</span>';
+      const dirLabel = r.dir==="up" ? '<span class="dir-up">&#9650; Naik</span>'
+                      : r.dir==="down" ? '<span class="dir-down">&#9660; Turun</span>'
+                      : r.dir==="flat" ? '<span class="dir-flat">Datar</span>'
+                      : '<span class="dir-flat">&mdash;</span>';
+      const pts = r.changeNext!=null ? toPoints(r.changeNext) : null;
+      const barPct = pts!=null ? Math.min(100, Math.abs(pts)/maxAbs*100) : 0;
+      const barColor = pts==null ? "var(--ink-mute)" : (pts>=0?"var(--up)":"var(--down)");
+      const rowStyle = (i===0 && gi>0) ? ' style="border-top:2px solid var(--hair-strong);"' : '';
+      rowsHtml += `<tr${rowStyle}>
+        <td>${i===0?MONTHS_ID[gi]:""}</td>
+        <td class="num">${r.year}</td>
+        <td class="num">${dateID(r.date)}</td>
+        <td>${badge}</td>
+        <td class="num">${pts!=null?fmtSigned(pts,0)+" pt":"&mdash;"}</td>
+        <td>${dirLabel}</td>
+        <td><div style="background:var(--surface-2); border-radius:3px; height:8px; width:90px; overflow:hidden;"><div style="height:100%; width:${barPct}%; background:${barColor};"></div></div></td>
+      </tr>`;
+    });
+  });
+  tbody.innerHTML = rowsHtml;
+}
+
+/* ---------------- AI analysis of monthly patterns ---------------- */
+function fmtPlainSigned(n){ const r=Math.round(n); return (r>=0?"+":"")+r; }
+function buildMonthlySummary(){
+  const groups = monthlyGroupsAll();
+  const lines = [];
+  groups.forEach((g,gi)=>{
+    const withData = g.filter(r=>r.changeNext!=null);
+    if(withData.length===0) return;
+    const ups = withData.filter(r=>r.dir==="up").length;
+    const downs = withData.filter(r=>r.dir==="down").length;
+    const avg = withData.reduce((s,r)=>s+toPoints(r.changeNext),0)/withData.length;
+    const detail = withData.map(r=>`${r.year} ${fmtPlainSigned(toPoints(r.changeNext))}`).join(", ");
+    lines.push(`${MONTHS_ID[gi]} (n=${withData.length}, naik ${ups}x, turun ${downs}x, rata-rata ${fmtPlainSigned(avg)} poin) -> ${detail}`);
+  });
+  return lines.join("\n");
+}
+async function initAI(){
+  const btn = document.getElementById("aiAnalyzeBtn");
+  const statusEl = document.getElementById("aiStatus");
+  const outEl = document.getElementById("aiOutput");
+  if(!window.claude || typeof window.claude.use !== "function"){
+    btn.style.display = "none";
+    statusEl.innerHTML = '<span style="color:var(--ink-mute); font-size:12.5px;">Fitur analisa AI tidak tersedia di tampilan ini.</span>';
+    return;
+  }
+  let sample;
+  try{ sample = await window.claude.use("sample"); } catch(e){ sample = null; }
+  if(!sample){
+    btn.style.display = "none";
+    statusEl.innerHTML = '<span style="color:var(--ink-mute); font-size:12.5px;">Fitur analisa AI tidak diizinkan pada tampilan ini.</span>';
+    return;
+  }
+  btn.addEventListener("click", async ()=>{
+    btn.disabled = true;
+    outEl.textContent = "";
+    statusEl.innerHTML = '<span style="color:var(--ink-mute); font-size:12.5px;">Menganalisis pola bulanan&hellip;</span>';
+    try{
+      const summary = buildMonthlySummary();
+      const prompt = "Berikut ringkasan reaksi harga emas (XAU/USD) terhadap rapat FOMC The Fed, dikelompokkan per bulan kalender 2020-2026. Angka dalam poin adalah perubahan harga dari sebelum rapat ke penutupan keesokan harinya (bukan pips per menit, data harian):\n\n"
+        + summary
+        + "\n\nTuliskan analisa singkat (maksimal 180 kata, bahasa Indonesia biasa tanpa markdown) tentang pola yang terlihat per bulan: bulan mana yang historisnya lebih sering turun setelah FOMC, bulan mana yang pergerakannya paling besar, dan tegaskan bahwa jumlah sampel per bulan sangat kecil (maksimal 7 kejadian) sehingga ini bukan sinyal prediktif untuk trading. Jangan menyarankan posisi BUY atau SELL tertentu.";
+      const result = await sample(prompt);
+      outEl.textContent = result.text;
+      statusEl.innerHTML = result.truncated ? '<span style="color:var(--ink-mute); font-size:12.5px;">(jawaban terpotong)</span>' : "";
+    } catch(err){
+      const code = err && err.code;
+      let msg = "Analisa gagal dibuat. Coba lagi sebentar lagi.";
+      if(code==="not_granted") msg = "Izin untuk fitur AI ditolak.";
+      else if(code==="rate_limited") msg = "Terlalu banyak permintaan, coba lagi beberapa saat lagi.";
+      else if(code==="cancelled") msg = "Dibatalkan.";
+      statusEl.innerHTML = `<span style="color:var(--down); font-size:12.5px;">${msg}</span>`;
+      if(err && err.text) outEl.textContent = err.text;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+/* ---------------- wire up + render ---------------- */
+function renderAll(){
+  renderStats();
+  renderChart();
+  renderCalendar();
+  initSimEvents();
+  fillSimDefaults();
+  renderCalc();
+  renderSim();
+  renderSimStats();
+  renderMonthlyChart();
+  renderMonthlyTable();
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{});
+initFilters();
+initTabs();
+initTheme();
+initPresets();
+initAI();
+document.getElementById("grafikBtn").addEventListener("click", ()=> activateTab("monthly"));
+
+["calcDir","calcEntry","calcSL","calcTP","contractSize","pointSize","lotSize","leverage"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", ()=>{ renderCalc(); renderSim(); renderSimStats(); renderMonthlyChart(); renderMonthlyTable(); });
+});
+document.getElementById("riskPct").addEventListener("input", renderCalc);
+["simRangeHigh","simRangeLow","simBuffer","simSL","simRR","simLot"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", ()=>{ renderSim(); renderSimStats(); });
+});
+
+renderAll();
+})();
+</script>
