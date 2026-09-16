@@ -17,8 +17,8 @@
     --accent:     #93690f;
     --accent-ink: #6e4e0a;
     --accent-soft:#f0e0b4;
-    --up:         #0b7d2e;
-    --up-soft:    #dcefdf;
+    --up:         #1f5fbf;
+    --up-soft:    #dde8f8;
     --down:       #b0392c;
     --down-soft:  #f5e0dc;
     --focus:      #1c5cab;
@@ -38,8 +38,8 @@
       --accent:     #dcaa3f;
       --accent-ink: #eec872;
       --accent-soft:#3a2f14;
-      --up:         #43b26a;
-      --up-soft:    #163524;
+      --up:         #5f9ff2;
+      --up-soft:    #15284a;
       --down:       #e0685a;
       --down-soft:  #3a201c;
       --focus:      #6ea8ea;
@@ -59,8 +59,8 @@
     --accent:     #dcaa3f;
     --accent-ink: #eec872;
     --accent-soft:#3a2f14;
-    --up:         #43b26a;
-    --up-soft:    #163524;
+    --up:         #5f9ff2;
+    --up-soft:    #15284a;
     --down:       #e0685a;
     --down-soft:  #3a201c;
     --focus:      #6ea8ea;
@@ -212,6 +212,39 @@
     border-radius:7px; padding:5px 10px; cursor:pointer;
   }
 
+
+  /* ---------- terpopuler / analisa / tanya ---------- */
+  .rank-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .rank-list li{display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:9px; background:var(--surface-2); border:1px solid var(--hair);}
+  .rank-list .pos{font-family:"IBM Plex Mono",monospace; font-weight:600; width:22px; color:var(--ink-mute);}
+  .rank-list .name{font-weight:600; flex:1;}
+  .rank-list .stat{font-size:12.5px; color:var(--ink-2); text-align:right;}
+  .rank-up li:first-child{background:var(--up-soft); border-color:transparent;}
+  .rank-down li:first-child{background:var(--down-soft); border-color:transparent;}
+  .rank-up .big{color:var(--up);} .rank-down .big{color:var(--down);}
+  .big{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:15px;}
+  .muted{color:var(--ink-mute); font-size:12.5px;}
+  .fc-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;}
+  .fc-card{border:1px solid var(--hair); border-radius:10px; padding:14px 16px; background:var(--surface-2);}
+  .fc-card h3{font-size:16px; margin-bottom:6px;}
+  .lean{display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:99px; margin-bottom:8px;}
+  .lean.up{background:var(--up-soft); color:var(--up);}
+  .lean.down{background:var(--down-soft); color:var(--down);}
+  .lean.flat{background:var(--surface); color:var(--ink-2); border:1px solid var(--hair-strong);}
+  textarea{
+    font:inherit; font-size:14px; color:var(--ink); background:var(--surface); width:100%; min-height:84px; resize:vertical;
+    border:1px solid var(--hair-strong); border-radius:8px; padding:9px 11px;
+  }
+  textarea:focus{outline:2px solid var(--focus); outline-offset:1px;}
+  .btn-primary{
+    font:inherit; font-size:13.5px; font-weight:600; background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:8px 16px; cursor:pointer;
+  }
+  .btn-primary:disabled{opacity:.55; cursor:default;}
+  .qa-answer{margin-top:12px; white-space:pre-wrap; line-height:1.7; font-size:14px; background:var(--surface-2); border:1px solid var(--hair); border-radius:10px; padding:12px 14px;}
+  .qa-answer:empty{display:none;}
+  .qa-q{font-weight:600; margin-bottom:6px; color:var(--ink);}
+
   @media (max-width:480px){
     .grid2{gap:14px;}
     .tiles{grid-template-columns:repeat(2,1fr);}
@@ -240,6 +273,8 @@
     <select id="monthSel"><option value="all">Semua bulan</option></select>
   </div>
   <button class="chip" id="grafikBtn" type="button" aria-pressed="false">Grafik &#128202;</button>
+  <button class="chip" id="populerBtn" type="button" aria-pressed="false">Terpopuler &#128293;</button>
+  <button class="chip" id="analisaBtn" type="button" aria-pressed="false">Analisa ke Depan &#128302;</button>
   <div class="spacer"></div>
   <button class="reset-btn" id="resetFilter" type="button">Reset filter</button>
 </div>
@@ -250,6 +285,8 @@
   <button class="tab" role="tab" aria-selected="false" data-panel="calc">Kalkulator Modal (Lot 0.01)</button>
   <button class="tab" role="tab" aria-selected="false" data-panel="sim">Simulasi Buy/Sell Stop</button>
   <button class="tab" role="tab" aria-selected="false" data-panel="monthly">Grafik Bulanan</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="popular">Terpopuler</button>
+  <button class="tab" role="tab" aria-selected="false" data-panel="forecast">Analisa ke Depan</button>
 </div>
 
 <!-- ===================== OVERVIEW ===================== -->
@@ -258,7 +295,7 @@
 
   <div class="card">
     <h2>Perubahan harga per FOMC (sebelum &rarr; keesokan hari)</h2>
-    <p class="desc">Setiap batang = satu rapat FOMC dalam rentang filter aktif. Hijau berarti emas naik dari harga penutupan sebelum rapat ke penutupan hari berikutnya; merah berarti turun. Arahkan kursor ke batang untuk detail.</p>
+    <p class="desc">Setiap batang = satu rapat FOMC dalam rentang filter aktif. Biru berarti emas naik dari harga penutupan sebelum rapat ke penutupan hari berikutnya; merah berarti turun. Arahkan kursor ke batang untuk detail.</p>
     <div class="chart-wrap"><svg id="barChart" viewBox="0 0 1000 340" style="width:100%; height:auto; display:block;"></svg><div class="bar-tip" id="barTip"></div></div>
     <div class="legend">
       <span><i class="swatch" style="background:var(--up)"></i>Naik</span>
@@ -419,6 +456,86 @@
   </div>
 </section>
 
+
+<!-- ===================== TERPOPULER ===================== -->
+<section class="panel" id="panel-popular">
+  <div class="card">
+    <h2>Grafik seluruh rapat FOMC 2020&ndash;2026</h2>
+    <p class="desc">Urutan waktu dari rapat pertama 2020 sampai rapat terakhir 2026, tanpa filter. <b style="color:var(--up)">Biru = naik</b>, <b style="color:var(--down)">merah = turun</b> (harga sebelum rapat &rarr; penutupan keesokan hari). Garis putus-putus menandai awal tiap tahun.</p>
+    <div class="chart-wrap"><svg id="fullChart" viewBox="0 0 1000 360" style="width:100%; height:auto; display:block;"></svg><div class="bar-tip" id="fullTip"></div></div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--up)"></i>Naik</span>
+      <span><i class="swatch" style="background:var(--down)"></i>Turun</span>
+      <span><i class="swatch" style="background:var(--ink-mute)"></i>Belum ada data</span>
+    </div>
+  </div>
+
+  <div class="grid2" style="grid-template-columns:1fr 1fr;">
+    <div class="card">
+      <h2 style="color:var(--up)">&#9650; Bulan paling sering naik</h2>
+      <p class="desc">Diurutkan dari jumlah kejadian naik terbanyak, lalu persentase naik.</p>
+      <ol class="rank-list rank-up" id="rankUp"></ol>
+    </div>
+    <div class="card">
+      <h2 style="color:var(--down)">&#9660; Bulan paling sering turun</h2>
+      <p class="desc">Diurutkan dari jumlah kejadian turun terbanyak, lalu persentase turun.</p>
+      <ol class="rank-list rank-down" id="rankDown"></ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Jumlah naik vs turun per bulan (2020&ndash;2026)</h2>
+    <p class="desc">Batang biru di atas garis = berapa kali naik; batang merah di bawah garis = berapa kali turun.</p>
+    <div class="chart-wrap"><svg id="countChart" viewBox="0 0 1000 300" style="width:100%; height:auto; display:block;"></svg><div class="bar-tip" id="countTip"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Rekap per bulan</h2>
+    <p class="desc">Bulan tanpa rapat FOMC (misalnya Agustus) tidak punya data. Jumlah sampel per bulan kecil (maksimal 7), jadi anggap ini gambaran historis, bukan jaminan.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Bulan</th><th>Jumlah rapat</th><th>Naik</th><th>Turun</th><th>% Naik</th><th>Rata-rata</th><th>Rata-rata %</th><th>Naik terbesar</th><th>Turun terbesar</th></tr></thead>
+        <tbody id="popularTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ANALISA KE DEPAN ===================== -->
+<section class="panel" id="panel-forecast">
+  <div class="card">
+    <h2>Analisa ke depan &mdash; rapat FOMC berikutnya</h2>
+    <p class="desc" id="fcDesc">Perkiraan berbasis statistik historis 2020&ndash;2026: kecenderungan arah per bulan dan kisaran gerak yang biasa terjadi, dihitung dalam persen lalu diterapkan ke harga terakhir.</p>
+    <div class="tiles" id="fcTiles"></div>
+    <div class="fc-grid" id="fcCards"></div>
+  </div>
+
+  <div class="card">
+    <h2>Analisa AI untuk rapat berikutnya</h2>
+    <p class="desc">Meminta Claude merangkum statistik di atas menjadi skenario ke depan.</p>
+    <button class="btn-primary" id="fcAiBtn" type="button">Buat analisa ke depan</button>
+    <div id="fcAiStatus" style="margin-top:10px;"></div>
+    <div id="fcAiOutput" class="qa-answer"></div>
+  </div>
+
+  <div class="card" id="qaCard">
+    <h2>Tanya soal pergerakan XAU/USD</h2>
+    <p class="desc">Tulis pertanyaan tentang pergerakan emas di sekitar FOMC, misalnya &ldquo;Bulan Maret biasanya naik atau turun?&rdquo; atau &ldquo;Bagaimana pergerakan tahun 2022?&rdquo;.</p>
+    <textarea id="qaInput" placeholder="Ketik pertanyaan Anda tentang XAU/USD&hellip;"></textarea>
+    <div class="chip-row" id="qaSuggest" style="margin:10px 0;"></div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <button class="btn-primary" id="qaBtn" type="button">Analisa pertanyaan</button>
+      <span class="muted" id="qaMode"></span>
+    </div>
+    <div id="qaStatus" style="margin-top:10px;"></div>
+    <div id="qaOutput" class="qa-answer"></div>
+  </div>
+
+  <div class="disclaimer">
+    <b>Catatan:</b> Analisa ke depan murni membaca pola historis dari sampel kecil (sekitar 50 rapat, maksimal 7 per bulan). Hasilnya bukan sinyal BUY/SELL dan bukan jaminan arah harga. Kebijakan The Fed, data inflasi, dan geopolitik bisa membuat pergerakan jauh berbeda dari rata-rata.
+  </div>
+</section>
+
 <script>
 (function(){
 "use strict";
@@ -538,6 +655,8 @@ function activateTab(panel){
   document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x.dataset.panel===panel ? "true":"false"));
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
   document.getElementById("panel-"+panel).classList.add("active");
+  const btnMap = {monthly:"grafikBtn", popular:"populerBtn", forecast:"analisaBtn"};
+  Object.entries(btnMap).forEach(([k,id])=> document.getElementById(id).setAttribute("aria-pressed", k===panel ? "true":"false"));
 }
 
 /* ---------------- theme toggle ---------------- */
@@ -1045,6 +1164,393 @@ async function initAI(){
   });
 }
 
+/* ---------------- terpopuler: month stats ---------------- */
+function pctChange(r){ return r.changeNext/r.prevClose*100; }
+function pctRange(r){ return r.rangeDay/r.prevClose*100; }
+function fmtPct(n){ return (n>=0?"+":"")+n.toFixed(2)+"%"; }
+function monthStats(){
+  return monthlyGroupsAll().map((g,gi)=>{
+    const rows = g.filter(r=>r.changeNext!=null);
+    const n = rows.length;
+    const ups = rows.filter(r=>r.dir==="up").length;
+    const downs = rows.filter(r=>r.dir==="down").length;
+    const avgPts = n ? rows.reduce((s,r)=>s+toPoints(r.changeNext),0)/n : null;
+    const avgPct = n ? rows.reduce((s,r)=>s+pctChange(r),0)/n : null;
+    const avgAbsPct = n ? rows.reduce((s,r)=>s+Math.abs(pctChange(r)),0)/n : null;
+    const avgRangePct = n ? rows.reduce((s,r)=>s+pctRange(r),0)/n : null;
+    const best = n ? rows.reduce((a,b)=>b.changeNext>a.changeNext?b:a) : null;
+    const worst = n ? rows.reduce((a,b)=>b.changeNext<a.changeNext?b:a) : null;
+    return {mi:gi, name:MONTHS_ID[gi], rows, n, ups, downs, avgPts, avgPct, avgAbsPct, avgRangePct, best, worst,
+            upRate: n? ups/n : null, downRate: n? downs/n : null};
+  });
+}
+function overallStats(){
+  const rows = DATA.filter(r=>r.changeNext!=null);
+  const n = rows.length;
+  return {
+    n, ups: rows.filter(r=>r.dir==="up").length, downs: rows.filter(r=>r.dir==="down").length,
+    avgAbsPct: rows.reduce((s,r)=>s+Math.abs(pctChange(r)),0)/n,
+    avgRangePct: rows.reduce((s,r)=>s+pctRange(r),0)/n,
+    rows
+  };
+}
+function showTip(svg, tip, e, html){
+  tip.innerHTML = html;
+  const b = svg.getBoundingClientRect();
+  tip.style.left = (e.clientX-b.left)+"px"; tip.style.top = (e.clientY-b.top)+"px"; tip.style.opacity = 1;
+}
+
+function renderFullChart(){
+  const rows = DATA;
+  const svg = document.getElementById("fullChart");
+  const tip = document.getElementById("fullTip");
+  const W=1000,H=360,padL=64,padR=16,padT=30,padB=30;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const n=rows.length, gap=3;
+  const bw=Math.max(2,(plotW-gap*(n-1))/n);
+  const withData = rows.filter(r=>r.changeNext!=null);
+  const maxAbs = Math.max(1, ...withData.map(r=>Math.abs(toPoints(r.changeNext))));
+  const yZero = padT+plotH/2;
+  const scaleY = (plotH/2-10)/maxAbs;
+  let html="";
+  [-1,-0.5,0,0.5,1].forEach(f=>{
+    const y=yZero-f*maxAbs*scaleY;
+    html+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--hair)" stroke-width="1"/>`;
+    html+=`<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="11">${fmt(f*maxAbs,0)}</text>`;
+  });
+  html+=`<line x1="${padL}" y1="${yZero}" x2="${W-padR}" y2="${yZero}" stroke="var(--hair-strong)" stroke-width="1.5"/>`;
+  let lastYear=null;
+  rows.forEach((r,i)=>{
+    const x=padL+i*(bw+gap);
+    if(r.year!==lastYear){
+      lastYear=r.year;
+      html+=`<line x1="${x-gap/2}" y1="${padT-14}" x2="${x-gap/2}" y2="${H-padB}" stroke="var(--hair-strong)" stroke-dasharray="3 3"/>`;
+      html+=`<text x="${x+2}" y="${padT-4}" font-size="12" style="fill:var(--ink-2); font-weight:600">${r.year}</text>`;
+    }
+    if(r.changeNext==null){
+      html+=`<rect data-i="${i}" x="${x}" y="${yZero-3}" width="${bw}" height="6" rx="1.5" fill="var(--ink-mute)" opacity="0.5"></rect>`;
+    } else {
+      const pts=toPoints(r.changeNext);
+      const h=Math.max(2,Math.abs(pts)*scaleY);
+      html+=`<rect data-i="${i}" x="${x}" y="${pts>=0?yZero-h:yZero}" width="${bw}" height="${h}" rx="1.5" fill="${pts>=0?"var(--up)":"var(--down)"}"></rect>`;
+    }
+  });
+  html+=`<text x="${padL}" y="${H-8}" font-size="11">sumbu kiri: poin &middot; ${n} rapat</text>`;
+  svg.innerHTML=html;
+  svg.querySelectorAll("rect[data-i]").forEach(rect=>{
+    rect.style.cursor="pointer";
+    rect.addEventListener("mousemove",(e)=>{
+      const r=rows[+rect.dataset.i];
+      showTip(svg, tip, e, r.changeNext==null ? `${dateID(r.date)} &mdash; belum ada data`
+        : `${dateID(r.date)}: ${fmtSigned(toPoints(r.changeNext),0)} poin (${fmtPct(pctChange(r))})<br>${fmt(r.prevClose)} &rarr; ${fmt(r.nextClose)}`);
+    });
+    rect.addEventListener("mouseleave",()=>{ tip.style.opacity=0; });
+  });
+}
+
+function renderRanking(){
+  const stats = monthStats().filter(m=>m.n>0);
+  const upSorted = stats.slice().sort((a,b)=> b.ups-a.ups || b.upRate-a.upRate || b.avgPct-a.avgPct);
+  const downSorted = stats.slice().sort((a,b)=> b.downs-a.downs || b.downRate-a.downRate || a.avgPct-b.avgPct);
+  const item = (m,i,kind)=>{
+    const cnt = kind==="up"?m.ups:m.downs;
+    const rate = kind==="up"?m.upRate:m.downRate;
+    const years = m.rows.filter(r=>r.dir===kind).map(r=>r.year).join(", ") || "&mdash;";
+    return `<li><span class="pos">${i+1}</span>
+      <span class="name">${m.name}<br><span class="muted">tahun: ${years}</span></span>
+      <span class="stat"><span class="big">${cnt}&times;</span> dari ${m.n}<br>${(rate*100).toFixed(0)}% &middot; rata-rata ${fmtPct(m.avgPct)}</span></li>`;
+  };
+  document.getElementById("rankUp").innerHTML = upSorted.slice(0,6).map((m,i)=>item(m,i,"up")).join("");
+  document.getElementById("rankDown").innerHTML = downSorted.slice(0,6).map((m,i)=>item(m,i,"down")).join("");
+}
+
+function renderCountChart(){
+  const stats = monthStats();
+  const svg = document.getElementById("countChart");
+  const tip = document.getElementById("countTip");
+  const W=1000,H=300,padL=40,padR=16,padT=24,padB=34;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const maxC = Math.max(1, ...stats.map(m=>Math.max(m.ups,m.downs)));
+  const yZero=padT+plotH/2, unit=(plotH/2-14)/maxC;
+  const groupW=plotW/12, bw=Math.min(46, groupW*0.55);
+  let html="";
+  for(let c=-maxC;c<=maxC;c++){
+    const y=yZero-c*unit;
+    html+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="${c===0?"var(--hair-strong)":"var(--hair)"}" stroke-width="${c===0?1.5:1}"/>`;
+    html+=`<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10">${Math.abs(c)}</text>`;
+  }
+  stats.forEach(m=>{
+    const x=padL+m.mi*groupW+(groupW-bw)/2;
+    if(m.ups){ const h=m.ups*unit;
+      html+=`<rect data-m="${m.mi}" x="${x}" y="${yZero-h}" width="${bw}" height="${h}" rx="3" fill="var(--up)"></rect>`;
+      html+=`<text x="${x+bw/2}" y="${yZero-h-4}" text-anchor="middle" font-size="11" style="fill:var(--up); font-weight:600">${m.ups}</text>`; }
+    if(m.downs){ const h=m.downs*unit;
+      html+=`<rect data-m="${m.mi}" x="${x}" y="${yZero}" width="${bw}" height="${h}" rx="3" fill="var(--down)"></rect>`;
+      html+=`<text x="${x+bw/2}" y="${yZero+h+12}" text-anchor="middle" font-size="11" style="fill:var(--down); font-weight:600">${m.downs}</text>`; }
+    if(!m.n) html+=`<text x="${x+bw/2}" y="${yZero-4}" text-anchor="middle" font-size="10">tidak ada</text>`;
+    html+=`<text x="${x+bw/2}" y="${H-10}" text-anchor="middle" font-size="11">${m.name.slice(0,3)}</text>`;
+  });
+  svg.innerHTML=html;
+  svg.querySelectorAll("rect[data-m]").forEach(rect=>{
+    rect.addEventListener("mousemove",(e)=>{
+      const m=stats[+rect.dataset.m];
+      showTip(svg, tip, e, `${m.name}: naik ${m.ups}&times;, turun ${m.downs}&times; (n=${m.n})`);
+    });
+    rect.addEventListener("mouseleave",()=>{ tip.style.opacity=0; });
+  });
+}
+
+function renderPopularTable(){
+  document.getElementById("popularTbody").innerHTML = monthStats().map(m=>{
+    if(!m.n) return `<tr><td>${m.name}</td><td class="num">0</td><td colspan="7" class="dir-flat">Tidak ada rapat FOMC dengan data</td></tr>`;
+    return `<tr>
+      <td>${m.name}</td><td class="num">${m.n}</td>
+      <td class="num dir-up">${m.ups}</td><td class="num dir-down">${m.downs}</td>
+      <td class="num">${(m.upRate*100).toFixed(0)}%</td>
+      <td class="num ${m.avgPts>=0?"dir-up":"dir-down"}">${fmtSigned(m.avgPts,0)} pt</td>
+      <td class="num ${m.avgPct>=0?"dir-up":"dir-down"}">${fmtPct(m.avgPct)}</td>
+      <td class="num">${m.best.changeNext>0?`<span class="dir-up">${fmtSigned(toPoints(m.best.changeNext),0)}</span> (${m.best.year})`:"&mdash;"}</td>
+      <td class="num">${m.worst.changeNext<0?`<span class="dir-down">${fmtSigned(toPoints(m.worst.changeNext),0)}</span> (${m.worst.year})`:"&mdash;"}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderPopular(){ renderFullChart(); renderRanking(); renderCountChart(); renderPopularTable(); }
+
+/* ---------------- analisa ke depan ---------------- */
+function latestPrice(){
+  const withPrice = DATA.filter(r=>r.prevClose!=null || r.nextClose!=null);
+  const last = withPrice[withPrice.length-1];
+  if(last.nextClose!=null) return {price:last.nextClose, date:last.nextDate};
+  return {price:last.prevClose, date:last.prevDate};
+}
+function leanOf(rate, n){
+  if(!n) return {cls:"flat", label:"Tidak ada data historis"};
+  if(n<3) return {cls:"flat", label:`Sampel terlalu sedikit (n=${n})`};
+  if(rate>=0.6) return {cls:"up", label:"Historis condong NAIK"};
+  if(rate<=0.4) return {cls:"down", label:"Historis condong TURUN"};
+  return {cls:"flat", label:"Historis campuran / netral"};
+}
+function forecastData(){
+  const ms = monthStats();
+  const all = overallStats();
+  const lp = latestPrice();
+  const recent = all.rows.slice(-8);
+  const recentUps = recent.filter(r=>r.dir==="up").length;
+  const upcoming = DATA.filter(r=>!r.hasData).map(r=>{
+    const m = ms[r.month-1];
+    const movePct = m.n ? m.avgAbsPct : all.avgAbsPct;
+    const rangePct = m.n ? m.avgRangePct : all.avgRangePct;
+    return {r, m, lean:leanOf(m.upRate,m.n), movePct, rangePct,
+      moveUsd: lp.price*movePct/100, rangeUsd: lp.price*rangePct/100};
+  });
+  return {ms, all, lp, recent, recentUps, upcoming};
+}
+function renderForecast(){
+  const f = forecastData();
+  const pt = pointSize();
+  const rn = f.recent.length;
+  document.getElementById("fcTiles").innerHTML = `
+    <div class="tile"><div class="label">Harga acuan terakhir</div><div class="value num">${fmt(f.lp.price)}</div><div class="sub">${dateID(f.lp.date)}</div></div>
+    <div class="tile ${f.all.ups>=f.all.downs?"up":"down"}"><div class="label">Semua rapat 2020&ndash;2026</div><div class="value num">${f.all.ups} naik / ${f.all.downs} turun</div><div class="sub">${(f.all.ups/f.all.n*100).toFixed(0)}% naik dari ${f.all.n} rapat</div></div>
+    <div class="tile ${f.recentUps*2>=rn?"up":"down"}"><div class="label">Tren ${rn} rapat terakhir</div><div class="value num">${f.recentUps} naik / ${rn-f.recentUps} turun</div><div class="sub">${f.recent.map(r=>r.dir==="up"?'<span class="dir-up">&#9650;</span>':'<span class="dir-down">&#9660;</span>').join(" ")}</div></div>
+    <div class="tile"><div class="label">Rata-rata gerak per rapat</div><div class="value num">&plusmn;${f.all.avgAbsPct.toFixed(2)}%</div><div class="sub">&asymp; &plusmn;${fmt(f.lp.price*f.all.avgAbsPct/100/pt,0)} poin dari harga acuan</div></div>
+  `;
+  document.getElementById("fcCards").innerHTML = f.upcoming.length ? f.upcoming.map(u=>{
+    const p=f.lp.price;
+    const hist = u.m.rows.map(r=>`<span class="${r.dir==="up"?"dir-up":"dir-down"}">${r.year} ${fmtPct(pctChange(r))}</span>`).join(" &middot; ") || "&mdash;";
+    return `<div class="fc-card">
+      <h3>${dateID(u.r.date)}</h3>
+      <span class="lean ${u.lean.cls}">${u.lean.label}</span>
+      <div class="result-row"><span class="k">Riwayat ${u.m.name}</span><span class="v num">${u.m.ups} naik / ${u.m.downs} turun</span></div>
+      <div class="result-row"><span class="k">Rata-rata arah ${u.m.name}</span><span class="v num ${u.m.avgPct>=0?"dir-up":"dir-down"}">${u.m.n?fmtPct(u.m.avgPct):"&mdash;"}</span></div>
+      <div class="result-row"><span class="k">Perkiraan gerak (&plusmn;)</span><span class="v num">${fmt(u.moveUsd)} USD &asymp; ${fmt(u.moveUsd/pt,0)} pt</span></div>
+      <div class="result-row"><span class="k">Skenario naik</span><span class="v num dir-up">${fmt(p+u.moveUsd)}</span></div>
+      <div class="result-row"><span class="k">Skenario turun</span><span class="v num dir-down">${fmt(p-u.moveUsd)}</span></div>
+      <div class="result-row"><span class="k">Range hari-H yang biasa</span><span class="v num">${fmt(u.rangeUsd/pt,0)} pt (${u.rangePct.toFixed(2)}%)</span></div>
+      <p class="muted" style="margin:8px 0 0;">${hist}</p>
+    </div>`;
+  }).join("") : '<p class="muted">Tidak ada rapat mendatang di data.</p>';
+}
+function forecastPromptContext(){
+  const f = forecastData();
+  const lines = [];
+  lines.push(`Harga acuan XAU/USD terakhir: ${f.lp.price.toFixed(2)} (${f.lp.date}).`);
+  lines.push(`Total ${f.all.n} rapat FOMC 2020-2026 dengan data: ${f.all.ups} naik, ${f.all.downs} turun. Rata-rata gerak absolut ${f.all.avgAbsPct.toFixed(2)}%, rata-rata range hari-H ${f.all.avgRangePct.toFixed(2)}%.`);
+  lines.push(`${f.recent.length} rapat terakhir: ${f.recent.map(r=>`${r.date} ${fmtPct(pctChange(r))}`).join(", ")}.`);
+  lines.push("Statistik per bulan kalender:");
+  f.ms.filter(m=>m.n).forEach(m=>lines.push(`- ${m.name}: n=${m.n}, naik ${m.ups}, turun ${m.downs}, rata-rata ${fmtPct(m.avgPct)}, gerak absolut ${m.avgAbsPct.toFixed(2)}% -> ${m.rows.map(r=>`${r.year} ${fmtPct(pctChange(r))}`).join(", ")}`));
+  lines.push("Rapat mendatang: " + f.upcoming.map(u=>`${u.r.date} (bulan ${u.m.name}, perkiraan gerak +/-${u.moveUsd.toFixed(0)} USD)`).join("; "));
+  lines.push("Semua rapat (tanggal: harga sebelum -> penutupan keesokan, perubahan %, range hari-H USD, catatan):");
+  f.all.rows.forEach(r=>lines.push(`${r.date}: ${r.prevClose.toFixed(2)} -> ${r.nextClose.toFixed(2)}, ${fmtPct(pctChange(r))}, range ${r.rangeDay.toFixed(2)}${r.note?", "+r.note:""}`));
+  return lines.join("\n");
+}
+
+/* ---------------- tanya XAU: jawaban lokal (tanpa AI) ---------------- */
+const MONTH_ALIASES = [
+  ["januari","jan","january"],["februari","feb","pebruari","february"],["maret","mar","march"],["april","apr"],
+  ["mei","may"],["juni","jun","june"],["juli","jul","july"],["agustus","agu","agt","aug","august"],
+  ["september","sep","sept"],["oktober","okt","oct","october"],["november","nov","nopember"],["desember","des","dec","december"]
+];
+function answerLocal(q){
+  const text = q.toLowerCase();
+  const words = text.split(/[^a-z0-9]+/);
+  const f = forecastData();
+  const pt = pointSize();
+  const out = [];
+  const months = [];
+  MONTH_ALIASES.forEach((al,i)=>{ if(al.some(a=>words.includes(a))) months.push(i); });
+  const years = Array.from(new Set(text.match(/\b202[0-6]\b/g)||[]));
+  const wantsFuture = /(depan|prediksi|perkiraan|proyeksi|nanti|berikut|selanjutnya|outlook|forecast)/.test(text);
+  const wantsPopular = /(sering|populer|terpopuler|terbanyak|kebanyakan)/.test(text);
+  const wantsBiggest = /(terbesar|tertinggi|terendah|ekstrem|paling besar|paling jauh)/.test(text);
+  const wantsVol = /(volatil|range|rentang|rata-rata gerak|poin|pip)/.test(text);
+
+  months.forEach(mi=>{
+    const m = f.ms[mi];
+    if(!m.n){ out.push(`${m.name}: tidak ada rapat FOMC dengan data pada 2020-2026, jadi tidak ada pola historis untuk bulan ini.`); return; }
+    const lean = leanOf(m.upRate,m.n);
+    out.push(`${m.name} (${m.n} rapat): naik ${m.ups} kali, turun ${m.downs} kali. ${lean.label.replace("Historis","Secara historis")}.\n`
+      + `Rata-rata perubahan ${fmtPct(m.avgPct)} (${fmtSigned(m.avgPts,0)} poin), rata-rata gerak absolut ${m.avgAbsPct.toFixed(2)}%.\n`
+      + `Rincian: ${m.rows.map(r=>`${r.year} ${fmtPct(pctChange(r))}`).join(", ")}.`);
+  });
+
+  years.forEach(y=>{
+    const rows = DATA.filter(r=>r.year===y && r.changeNext!=null);
+    if(!rows.length){ out.push(`Tahun ${y}: belum ada data.`); return; }
+    const ups = rows.filter(r=>r.dir==="up").length;
+    const tot = rows.reduce((s,r)=>s+pctChange(r),0);
+    const best = rows.reduce((a,b)=>b.changeNext>a.changeNext?b:a);
+    const worst = rows.reduce((a,b)=>b.changeNext<a.changeNext?b:a);
+    out.push(`Tahun ${y} (${rows.length} rapat): naik ${ups} kali, turun ${rows.length-ups} kali, jumlah reaksi ${fmtPct(tot)}.\n`
+      + `Kenaikan terbesar ${dateID(best.date)} ${fmtPct(pctChange(best))}; penurunan terbesar ${dateID(worst.date)} ${fmtPct(pctChange(worst))}.\n`
+      + `Harga sebelum rapat pertama ${fmt(rows[0].prevClose)}, penutupan setelah rapat terakhir ${fmt(rows[rows.length-1].nextClose)}.`);
+  });
+
+  if(wantsPopular && !months.length){
+    const s = f.ms.filter(m=>m.n);
+    const up = s.slice().sort((a,b)=>b.ups-a.ups||b.upRate-a.upRate).slice(0,3);
+    const dn = s.slice().sort((a,b)=>b.downs-a.downs||b.downRate-a.downRate).slice(0,3);
+    out.push(`Bulan paling sering naik: ${up.map(m=>`${m.name} (${m.ups} dari ${m.n})`).join(", ")}.\n`
+      + `Bulan paling sering turun: ${dn.map(m=>`${m.name} (${m.downs} dari ${m.n})`).join(", ")}.`);
+  }
+
+  if(wantsBiggest){
+    const rows = f.all.rows.slice().sort((a,b)=>pctChange(b)-pctChange(a));
+    out.push(`3 kenaikan terbesar: ${rows.slice(0,3).map(r=>`${dateID(r.date)} ${fmtPct(pctChange(r))}`).join(", ")}.\n`
+      + `3 penurunan terbesar: ${rows.slice(-3).reverse().map(r=>`${dateID(r.date)} ${fmtPct(pctChange(r))}`).join(", ")}.`);
+  }
+
+  if(wantsVol && !months.length && !years.length){
+    out.push(`Rata-rata gerak XAU/USD per rapat FOMC: ±${f.all.avgAbsPct.toFixed(2)}% (sebelum → keesokan hari), rata-rata range hari-H ${f.all.avgRangePct.toFixed(2)}%.\n`
+      + `Dari harga acuan ${fmt(f.lp.price)}, itu setara ±${fmt(f.lp.price*f.all.avgAbsPct/100)} USD (≈${fmt(f.lp.price*f.all.avgAbsPct/100/pt,0)} poin) dan range sekitar ${fmt(f.lp.price*f.all.avgRangePct/100/pt,0)} poin.`);
+  }
+
+  const recognized = out.length>0;
+  if(wantsFuture || !recognized){
+    const lines = f.upcoming.map(u=>`- ${dateID(u.r.date)}: ${u.lean.label.toLowerCase()} (${u.m.ups} naik / ${u.m.downs} turun di bulan ${u.m.name}); kisaran ±${fmt(u.moveUsd)} USD → skenario ${fmt(f.lp.price-u.moveUsd)} s/d ${fmt(f.lp.price+u.moveUsd)}.`);
+    out.push(`Gambaran ke depan dari harga acuan ${fmt(f.lp.price)} (${dateID(f.lp.date)}):\n${lines.join("\n")}\n`
+      + `Tren ${f.recent.length} rapat terakhir: ${f.recentUps} naik, ${f.recent.length-f.recentUps} turun.`);
+  }
+  if(!recognized && !wantsFuture){
+    out.unshift("Pertanyaan belum dikenali secara spesifik, jadi berikut gambaran umum. Coba sebutkan nama bulan, tahun (2020-2026), atau kata seperti \"sering naik\", \"terbesar\", \"volatilitas\", \"ke depan\".");
+  }
+  out.push("Catatan: ini pola historis dari sampel kecil, bukan sinyal BUY/SELL.");
+  return out.join("\n\n").replace(/&mdash;/g,"-");
+}
+
+/* ---------------- AI hooks (aktif bila halaman dibuka sebagai Artifact dengan izin sample) ---------------- */
+const samplePromise = (window.claude && typeof window.claude.use === "function")
+  ? window.claude.use("sample").catch(()=>null) : Promise.resolve(null);
+function aiErrorMsg(err){
+  const code = err && err.code;
+  if(code==="not_granted") return "Izin untuk fitur AI ditolak.";
+  if(code==="rate_limited") return "Terlalu banyak permintaan, coba lagi beberapa saat lagi.";
+  if(code==="cancelled") return "Dibatalkan.";
+  return "Analisa AI gagal dibuat. Coba lagi sebentar lagi.";
+}
+const AI_RULES = "Jawab dalam bahasa Indonesia biasa tanpa markdown. Gunakan hanya data di atas; jika data tidak cukup, katakan terus terang. Tegaskan bahwa sampel kecil sehingga ini bukan sinyal pasti, dan jangan menyarankan posisi BUY atau SELL tertentu.";
+
+function initForecastAI(){
+  const btn = document.getElementById("fcAiBtn");
+  const statusEl = document.getElementById("fcAiStatus");
+  const outEl = document.getElementById("fcAiOutput");
+  let sample = null;
+  statusEl.innerHTML = '<span class="muted">Tanpa AI, analisa dibuat dari statistik lokal di halaman ini.</span>';
+  samplePromise.then(s=>{ sample = s; if(s) statusEl.innerHTML = '<span class="muted">Analisa dibuat oleh Claude dari data dashboard.</span>'; });
+  btn.addEventListener("click", async ()=>{
+    if(!sample){ outEl.textContent = answerLocal("analisa ke depan, volatilitas, bulan paling sering naik turun"); return; }
+    btn.disabled = true; outEl.textContent = "Menyusun analisa ke depan…";
+    try{
+      const prompt = "Data reaksi harga emas (XAU/USD) terhadap rapat FOMC 2020-2026 (perubahan = harga sebelum rapat ke penutupan keesokan hari, data harian):\n\n"
+        + forecastPromptContext()
+        + "\n\nBuat analisa ke depan (maksimal 250 kata) untuk rapat-rapat FOMC mendatang: kecenderungan historis bulan tersebut, kisaran gerak yang wajar dari harga acuan, skenario naik dan skenario turun beserta level harganya, dan konteks tren terbaru. " + AI_RULES;
+      const res = await sample(prompt, {onText:({text})=>{ outEl.textContent = text; }});
+      outEl.textContent = res.text;
+      if(res.truncated) statusEl.innerHTML = '<span class="muted">(jawaban terpotong)</span>';
+    } catch(err){
+      statusEl.innerHTML = `<span style="color:var(--down); font-size:12.5px;">${aiErrorMsg(err)}</span>`;
+      if(err && err.code==="not_granted") sample = null;
+      outEl.textContent = (err && err.text) ? err.text : answerLocal("analisa ke depan");
+    } finally { btn.disabled = false; }
+  });
+}
+
+function initQA(){
+  const input = document.getElementById("qaInput");
+  const btn = document.getElementById("qaBtn");
+  const statusEl = document.getElementById("qaStatus");
+  const outEl = document.getElementById("qaOutput");
+  const modeEl = document.getElementById("qaMode");
+  const suggestions = [
+    "Bulan apa yang paling sering naik setelah FOMC?",
+    "Bulan September biasanya naik atau turun?",
+    "Bagaimana pergerakan XAU tahun 2022?",
+    "Kenaikan dan penurunan terbesar kapan?",
+    "Berapa rata-rata volatilitas saat FOMC?",
+    "Bagaimana perkiraan rapat FOMC ke depan?"
+  ];
+  const sug = document.getElementById("qaSuggest");
+  sug.innerHTML = suggestions.map((t,i)=>`<button type="button" class="chip" data-i="${i}">${t}</button>`).join("");
+  sug.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{ input.value = suggestions[+c.dataset.i]; ask(); }));
+  input.addEventListener("keydown",(e)=>{ if(e.key==="Enter" && (e.ctrlKey||e.metaKey)) ask(); });
+  btn.addEventListener("click", ask);
+
+  let sample = null;
+  modeEl.textContent = "Mode: statistik lokal · Ctrl+Enter untuk kirim";
+  samplePromise.then(s=>{ sample = s; if(s) modeEl.textContent = "Mode: AI (Claude) + data dashboard · Ctrl+Enter untuk kirim"; });
+
+  let controller = null;
+  async function ask(){
+    const q = input.value.trim();
+    statusEl.innerHTML = "";
+    if(!q){ statusEl.innerHTML = '<span class="muted">Tulis pertanyaan terlebih dahulu.</span>'; return; }
+    outEl.textContent = "";
+    const qEl = document.createElement("div"); qEl.className = "qa-q"; qEl.textContent = "Pertanyaan: " + q;
+    const aEl = document.createElement("div");
+    outEl.append(qEl, aEl);
+    if(!sample){ aEl.textContent = answerLocal(q); return; }
+    if(controller) controller.abort();
+    controller = new AbortController();
+    btn.disabled = true;
+    aEl.textContent = "Menganalisis…";
+    try{
+      const prompt = "Kamu analis yang menjawab pertanyaan tentang pergerakan emas (XAU/USD) di sekitar rapat FOMC The Fed. Data dashboard:\n\n"
+        + forecastPromptContext()
+        + "\n\nPertanyaan pengguna: " + q
+        + "\n\nJawab pertanyaan tersebut secara langsung dan ringkas (maksimal 220 kata), sertakan angka dari data. " + AI_RULES;
+      const res = await sample(prompt, {onText:({text})=>{ aEl.textContent = text; }, signal:controller.signal, cache:false});
+      aEl.textContent = res.text;
+      if(res.truncated) statusEl.innerHTML = '<span class="muted">(jawaban terpotong)</span>';
+    } catch(err){
+      if(err && err.code==="cancelled") return;
+      if(err && err.code==="not_granted"){ sample = null; modeEl.textContent = "Mode: statistik lokal"; }
+      else statusEl.innerHTML = `<span style="color:var(--down); font-size:12.5px;">${aiErrorMsg(err)}</span>`;
+      aEl.textContent = (err && err.text) ? err.text : answerLocal(q);
+    } finally { btn.disabled = false; }
+  }
+}
+
 /* ---------------- wire up + render ---------------- */
 function renderAll(){
   renderStats();
@@ -1057,6 +1563,8 @@ function renderAll(){
   renderSimStats();
   renderMonthlyChart();
   renderMonthlyTable();
+  renderPopular();
+  renderForecast();
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{});
@@ -1066,9 +1574,13 @@ initTheme();
 initPresets();
 initAI();
 document.getElementById("grafikBtn").addEventListener("click", ()=> activateTab("monthly"));
+document.getElementById("populerBtn").addEventListener("click", ()=> activateTab("popular"));
+document.getElementById("analisaBtn").addEventListener("click", ()=> activateTab("forecast"));
+initForecastAI();
+initQA();
 
 ["calcDir","calcEntry","calcSL","calcTP","contractSize","pointSize","lotSize","leverage"].forEach(id=>{
-  document.getElementById(id).addEventListener("input", ()=>{ renderCalc(); renderSim(); renderSimStats(); renderMonthlyChart(); renderMonthlyTable(); });
+  document.getElementById(id).addEventListener("input", ()=>{ renderCalc(); renderSim(); renderSimStats(); renderMonthlyChart(); renderMonthlyTable(); renderPopular(); renderForecast(); });
 });
 document.getElementById("riskPct").addEventListener("input", renderCalc);
 ["simRangeHigh","simRangeLow","simBuffer","simSL","simRR","simLot"].forEach(id=>{
